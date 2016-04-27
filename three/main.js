@@ -39,6 +39,9 @@ function init(){
         var mesh=new THREE.Mesh(geometry, material);
         group.add(mesh);
 
+
+        
+
     });
 
 
