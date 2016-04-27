@@ -38,10 +38,6 @@ function init(){
         var material=new THREE.MeshBasicMaterial({map: texture, overdraw: 0.5});
         var mesh=new THREE.Mesh(geometry, material);
         group.add(mesh);
-
-
-        
-
     });
 
 
