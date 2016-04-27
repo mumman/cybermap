@@ -11,8 +11,6 @@ define(function(){
         var mesh1=new THREE.Mesh(geometry, material);
         console.log(mesh1);
         return mesh1;
-
-
     });
     console.log(mesh);
     return {
