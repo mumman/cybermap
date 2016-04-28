@@ -45,10 +45,6 @@ define(function(){
                 '}'
 
             ].join('\n')
-
-
-
-
         }
     };
     console.log('shader.js');
