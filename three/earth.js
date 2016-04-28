@@ -9,13 +9,12 @@ define(function(){
         var geometry=new THREE.SphereGeometry(200, 20, 20);
         var material=new THREE.MeshBasicMaterial({map: texture, overdraw: 0.5});
         var mesh1=new THREE.Mesh(geometry, material);
-        console.log(mesh1);
+        //console.log(mesh1);
         return mesh1;
     });
-    console.log(mesh);
+    console.log("earth.js");
     return {
         mesh:mesh
-
     }
 });
 

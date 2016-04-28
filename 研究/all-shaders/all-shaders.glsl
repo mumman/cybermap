@@ -14,6 +14,10 @@ void main() {
     gl_FragColor = color;
 }
 
+
+
+
+
 // corona //
 attribute vec4 vertex;
 varying vec2 v_texcoord;
