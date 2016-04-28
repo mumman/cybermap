@@ -28,9 +28,12 @@ define(function(){
                 '}'
             ].join('\n')
         },
+
         'grid':{
             uniforms:{},
             vertexShader:[
+                'attribute vec4 position;',
+                'uniform mat4 mvp;',
                 'void main()',
                 '{',
                     'gl_PointSize = position.w;',
@@ -38,17 +41,18 @@ define(function(){
                 '}'
             ].join('\n'),
             fragmentShader:[
+               'uniform vec4 color;',
                'void main()',
                 '{',
-                    'gl_PointSize = position.w;',
-                    'gl_Position = mvp * vec4(position.xyz, 1.0);',
+                    'gl_FragColor = color;',
                 '}'
 
             ].join('\n')
         }
     };
-    console.log('shader.js');
 
+
+    console.log('shaders.js');
     return {
       shader:shader
     }

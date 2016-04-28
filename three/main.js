@@ -1,9 +1,9 @@
 require(['earth'], function(earth){
     // some code here
     //基本
-    var camera, scene, renderer, main, group;
+    var camera, scene, renderer, main;
     //时间
-    var clock = new THREE.Clock();
+    var clock=new THREE.Clock();
 
     //
     /*var  customUniforms;*/
@@ -31,59 +31,42 @@ require(['earth'], function(earth){
         main=document.getElementById('main');
         camera=new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 1, 2000);
         camera.position.z=500;
-
         scene=new THREE.Scene();
-        group=new THREE.Group();
-        scene.add(group);
 
+        //球
+        /*var ballGeometry=new THREE.SphereGeometry(60, 32, 16);*/
 
-        // earth
-        /*
-
-         var loader=new THREE.TextureLoader();
-         loader.load('textures/land_ocean_ice_cloud_2048.jpg', function(texture){
-         var geometry=new THREE.SphereGeometry(200, 20, 20);
-         var material=new THREE.MeshBasicMaterial({map: texture, overdraw: 0.5});
-         var mesh=new THREE.Mesh(geometry, material);
-         group.add(mesh);
-         });
-         */
-
-        var ballGeometry=new THREE.SphereGeometry(60, 32, 16);
-
+        var ballGeometry=earth.geometry;
         var loader=new THREE.TextureLoader();
-
         // load a resource
         loader.load(
             // resource URL
-            'textures/UV_Grid_Sm.jpg',
+            /*'textures/UV_Grid_Sm.jpg',*/
+            'textures/pattern.png',
             // Function when resource is loaded
             function(texture){
-                require(['shader'], function(shader){
+                require(['shaders'], function(shaders){
 
-                customUniforms=shader.shader['earth'].uniforms;
-                customUniforms.baseTexture.value=texture;
-                var customMaterial=new THREE.ShaderMaterial(
-                    {
-                        uniforms: customUniforms,
-                        /*vertexShader: document.getElementById('vertexShader').textContent,
-                        fragmentShader: document.getElementById('fragmentShader').textContent,*/
+                    customUniforms=shaders.shader['earth'].uniforms;
+                    customUniforms.baseTexture.value=texture;
 
-                        vertexShader:shader.shader['earth'].vertexShader,
-                        fragmentShader:shader.shader['earth'].fragmentShader,
+                    var customMaterial=new THREE.ShaderMaterial(
+                        {
+                            uniforms: customUniforms,
+                            vertexShader: shaders.shader['earth'].vertexShader,
+                            fragmentShader: shaders.shader['earth'].fragmentShader,
 
 
-                        side: THREE.DoubleSide
-                    });
-                var ball=new THREE.Mesh(ballGeometry, customMaterial);
-                ball.position.set(0, 0, 0);
-                ball.rotation.set(0, -Math.PI/2, 0);
-                scene.add(ball);
+                            side: THREE.DoubleSide
+                        });
+                    var ball=new THREE.Mesh(ballGeometry, customMaterial);
+                    ball.position.set(0, 0, 0);
+                    ball.rotation.set(0, -Math.PI/2, 0);
+                    scene.add(ball);
 
                 });
             }
         );
-
 
 
         /*//灯
@@ -104,16 +87,16 @@ require(['earth'], function(earth){
         window.addEventListener('resize', onWindowResize, false);
 
         //控制器
-        var controls = new THREE.OrbitControls(camera, renderer.domElement);
+        var controls=new THREE.OrbitControls(camera, renderer.domElement);
         controls.target.set(0, 0, 0);
         controls.update();
 
-/*
-        main.addEventListener('mousedown', onMouseDown, false);
+        /*
+         main.addEventListener('mousedown', onMouseDown, false);
 
-        main.addEventListener('mousewheel', onMouseWheel, false);
+         main.addEventListener('mousewheel', onMouseWheel, false);
 
-        document.addEventListener('keydown', onDocumentKeyDown, false);*/
+         document.addEventListener('keydown', onDocumentKeyDown, false);*/
 
     }
 
@@ -125,92 +108,89 @@ require(['earth'], function(earth){
 
     }
 
-/*
+    /*
 
-    function onMouseDown(event){
-        event.preventDefault();
+     function onMouseDown(event){
+     event.preventDefault();
 
-        main.addEventListener('mousemove', onMouseMove, false);
-        main.addEventListener('mouseup', onMouseUp, false);
-        main.addEventListener('mouseout', onMouseOut, false);
+     main.addEventListener('mousemove', onMouseMove, false);
+     main.addEventListener('mouseup', onMouseUp, false);
+     main.addEventListener('mouseout', onMouseOut, false);
 
-        mouseOnDown.x= -event.clientX;
-        mouseOnDown.y=event.clientY;
+     mouseOnDown.x= -event.clientX;
+     mouseOnDown.y=event.clientY;
 
-        targetOnDown.x=target.x;
-        targetOnDown.y=target.y;
+     targetOnDown.x=target.x;
+     targetOnDown.y=target.y;
 
-        main.style.cursor='move';
-    }
+     main.style.cursor='move';
+     }
 
-    function onMouseMove(event){
-        mouse.x= -event.clientX;
-        mouse.y=event.clientY;
+     function onMouseMove(event){
+     mouse.x= -event.clientX;
+     mouse.y=event.clientY;
 
-        var zoomDamp=distance/1000;
+     var zoomDamp=distance/1000;
 
-        target.x=targetOnDown.x+(mouse.x-mouseOnDown.x)*0.005*zoomDamp;
-        target.y=targetOnDown.y+(mouse.y-mouseOnDown.y)*0.005*zoomDamp;
+     target.x=targetOnDown.x+(mouse.x-mouseOnDown.x)*0.005*zoomDamp;
+     target.y=targetOnDown.y+(mouse.y-mouseOnDown.y)*0.005*zoomDamp;
 
-        target.y=target.y>PI_HALF ? PI_HALF : target.y;
-        target.y=target.y< -PI_HALF ? -PI_HALF : target.y;
-    }
+     target.y=target.y>PI_HALF ? PI_HALF : target.y;
+     target.y=target.y< -PI_HALF ? -PI_HALF : target.y;
+     }
 
-    function onMouseUp(event){
-        main.removeEventListener('mousemove', onMouseMove, false);
-        main.removeEventListener('mouseup', onMouseUp, false);
-        main.removeEventListener('mouseout', onMouseOut, false);
-        main.style.cursor='auto';
-    }
+     function onMouseUp(event){
+     main.removeEventListener('mousemove', onMouseMove, false);
+     main.removeEventListener('mouseup', onMouseUp, false);
+     main.removeEventListener('mouseout', onMouseOut, false);
+     main.style.cursor='auto';
+     }
 
-    function onMouseOut(event){
-        main.removeEventListener('mousemove', onMouseMove, false);
-        main.removeEventListener('mouseup', onMouseUp, false);
-        main.removeEventListener('mouseout', onMouseOut, false);
-    }
+     function onMouseOut(event){
+     main.removeEventListener('mousemove', onMouseMove, false);
+     main.removeEventListener('mouseup', onMouseUp, false);
+     main.removeEventListener('mouseout', onMouseOut, false);
+     }
 
-    function onMouseWheel(event){
-        event.preventDefault();
-        if(overRenderer){
-            zoom(event.wheelDeltaY*0.3);
-        }
-        return false;
-    }
+     function onMouseWheel(event){
+     event.preventDefault();
+     if(overRenderer){
+     zoom(event.wheelDeltaY*0.3);
+     }
+     return false;
+     }
 
-    function onDocumentKeyDown(event){
-        switch(event.keyCode){
-            case 38:
-                zoom(100);
-                event.preventDefault();
-                break;
-            case 40:
-                zoom(-100);
-                event.preventDefault();
-                break;
-        }
-    }
+     function onDocumentKeyDown(event){
+     switch(event.keyCode){
+     case 38:
+     zoom(100);
+     event.preventDefault();
+     break;
+     case 40:
+     zoom(-100);
+     event.preventDefault();
+     break;
+     }
+     }
 
-    function zoom(delta){
-        distanceTarget-=delta;
-        distanceTarget=distanceTarget>1000 ? 1000 : distanceTarget;
-        distanceTarget=distanceTarget<350 ? 350 : distanceTarget;
-    }
-*/
+     function zoom(delta){
+     distanceTarget-=delta;
+     distanceTarget=distanceTarget>1000 ? 1000 : distanceTarget;
+     distanceTarget=distanceTarget<350 ? 350 : distanceTarget;
+     }
+     */
 
     function animate(){
         requestAnimationFrame(animate);
         render();
     }
 
+    /*   var minxAmountValue= getMinxAmountValue();*/
     function render(){
         var time=performance.now()*0.001;
-
-
         camera.lookAt(scene.position);
-
-        var t = clock.getElapsedTime();
-        customUniforms.mixAmount.value = 0.5 * (1.0 + Math.sin(t));
-
+        var t=clock.getElapsedTime();
+        customUniforms.mixAmount.value=0.5*(1.0+Math.sin(t));
         renderer.render(scene, camera);
     }
 
