@@ -46,11 +46,9 @@ define(function(){
                 '{',
                     'gl_FragColor = color;',
                 '}'
-
             ].join('\n')
         }
     };
-
 
     console.log('shaders.js');
     return {
