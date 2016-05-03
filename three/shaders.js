@@ -13,10 +13,10 @@ define(function(){
                 'varying vec2 vUv;',
                 'void main()',
                 '{',
-                    'vUv = uv;',
-                    'vec3 goalPosition = 200.0 * vec3( 0, uv.y, -uv.x ) + vec3(0.0, -100.0, 100.0);',
-                    'vec3 newPosition = mix( position, goalPosition, mixAmount );',
-                    'gl_Position = projectionMatrix * modelViewMatrix * vec4( newPosition, 1.0 );',
+                'vUv = uv;',
+                'vec3 goalPosition = 200.0 * vec3( 0, uv.y, -uv.x ) + vec3(0.0, -100.0, 100.0);',
+                'vec3 newPosition = mix( position, goalPosition, mixAmount );',
+                'gl_Position = projectionMatrix * modelViewMatrix * vec4( newPosition, 1.0 );',
                 '}'
             ].join('\n'),
             fragmentShader:[
@@ -24,27 +24,33 @@ define(function(){
                 'varying vec2 vUv;',
                 'void main()',
                 '{',
-                    'gl_FragColor = texture2D( baseTexture, vUv );',
+                'gl_FragColor = texture2D( baseTexture, vUv );',
                 '}'
             ].join('\n')
         },
 
+
         'grid':{
-            uniforms:{},
+            uniforms:{
+                baseTexture: {type: "t", value: null},
+                blend:{type:"f",value:0.0}
+            },
             vertexShader:[
-                'attribute vec4 position;',
-                'uniform mat4 mvp;',
+                'uniform float blend;',
+                'varying vec2 vUv;',
                 'void main()',
                 '{',
-                    'gl_PointSize = position.w;',
-                    'gl_Position = mvp * vec4(position.xyz, 1.0);',
+                'vUv = uv;',
+                'vec3 P = mix(position, normal, blend);',
+                'gl_Position = projectionMatrix * modelViewMatrix * vec4( P, 1.0 );',
                 '}'
             ].join('\n'),
             fragmentShader:[
-               'uniform vec4 color;',
-               'void main()',
+                'uniform sampler2D baseTexture;',
+                'varying vec2 vUv;',
+                'void main()',
                 '{',
-                    'gl_FragColor = color;',
+                'gl_FragColor = texture2D( baseTexture, vUv );',
                 '}'
             ].join('\n')
         }

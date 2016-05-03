@@ -1,4 +1,4 @@
-require(['earth'], function(earth){
+require(['earth', 'gui'], function(earth, gui){
     // some code here
     //基本
     var camera, scene, renderer, main;
@@ -26,10 +26,11 @@ require(['earth'], function(earth){
     init();
     animate();
     var promise;
+
     function init(){
         main=document.getElementById('main');
         camera=new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 1, 2000);
-        camera.position.z=500;
+        camera.position.z=30;
         scene=new THREE.Scene();
 
         //球
@@ -40,19 +41,19 @@ require(['earth'], function(earth){
         // load a resource
         promise=new Promise(function(resolve, reject){
             loader.load(
-                //'textures/UV_Grid_Sm.jpg',
-                'textures/pattern.png',
+                'textures/UV_Grid_Sm.jpg',
+                //'textures/pattern.png',
                 function(texture){
                     require(['shaders'], function(shaders){
 
-                        customUniforms=shaders.shader['earth'].uniforms;
+                        customUniforms=shaders.shader['grid'].uniforms;
                         customUniforms.baseTexture.value=texture;
 
                         var customMaterial=new THREE.ShaderMaterial(
                             {
                                 uniforms: customUniforms,
-                                vertexShader: shaders.shader['earth'].vertexShader,
-                                fragmentShader: shaders.shader['earth'].fragmentShader,
+                                vertexShader: shaders.shader['grid'].vertexShader,
+                                fragmentShader: shaders.shader['grid'].fragmentShader,
                                 side: THREE.DoubleSide
                             });
                         var ball=new THREE.Mesh(ballGeometry, customMaterial);
@@ -66,6 +67,13 @@ require(['earth'], function(earth){
         });
 
 
+        /*
+         var customMaterial=new THREE.MeshBasicMaterial({color: 0x000000});
+         var ball=new THREE.Mesh(ballGeometry, customMaterial);
+         ball.position.set(0, 0, 0);
+         ball.rotation.set(0, -Math.PI/2, 0);
+         scene.add(ball);
+         */
 
 
         /*//灯
@@ -184,19 +192,29 @@ require(['earth'], function(earth){
         render();
     }
 
-    /*   var minxAmountValue= getMinxAmountValue();*/
-
     function render(){
         var time=performance.now()*0.001;
         camera.lookAt(scene.position);
         var t=clock.getElapsedTime();
-        /*customUniforms.mixAmount.value=0.5*(1.0+Math.sin(t));*/
-        /*zp.mixAmount.value=0.5*(1.0+Math.sin(t));*/
-        promise.then(function(){
-            customUniforms.mixAmount.value=0.5*(1.0+Math.sin(t));
-        });
+
+        if(gui.controls.switchPlane){
+            promise.then(function(){
+                //customUniforms.mixAmount.value=0.5*(1.0+Math.sin(t));
+                if(customUniforms.blend.value<=1){
+                    customUniforms.blend.value+=0.01;
+                }
+            });
+        }else{
+            promise.then(function(){
+                //customUniforms.mixAmount.value=0.5*(1.0+Math.sin(t));
+                if(customUniforms.blend.value>=0){
+                    customUniforms.blend.value-=0.01;
+                }
+            });
+        }
 
         renderer.render(scene, camera);
+
     }
 
 
