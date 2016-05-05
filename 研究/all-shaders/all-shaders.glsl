@@ -196,6 +196,7 @@ void main() {
 attribute vec3 position;
 attribute vec3 position2;
 attribute vec2 texcoord;
+
 varying vec2 v_texcoord;
 uniform mat4 mvp;
 uniform vec2 pattern_scale;
