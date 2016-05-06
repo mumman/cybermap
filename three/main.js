@@ -1,4 +1,4 @@
-require(['earth', 'gui'], function(earth, gui){
+require(['earth', 'stars', 'corona','gui'], function(earth, stars,corona, gui){
     // some code here
     //基本
     var camera, scene, renderer, main;
@@ -25,13 +25,15 @@ require(['earth', 'gui'], function(earth, gui){
 
     init();
     animate();
-    
+
     function init(){
         main=document.getElementById('main');
         camera=new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 1, 2000);
         camera.position.z=30;
         scene=new THREE.Scene();
         scene.add(earth.earth);
+        scene.add(stars.stars);
+        scene.add(corona.corona);
 
         /*//灯
          scene.add(new THREE.AmbientLight(0xffffff));*/
