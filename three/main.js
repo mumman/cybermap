@@ -24,9 +24,8 @@ require(['earth', 'gui'], function(earth, gui){
     var PI_HALF=Math.PI/2;
 
     init();
-
     animate();
-
+    
     function init(){
         main=document.getElementById('main');
         camera=new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 1, 2000);
