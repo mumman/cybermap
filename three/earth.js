@@ -1,9 +1,8 @@
 /**
  * Created by Administrator on 2016/4/27.
  */
-
-define(function(){
-        var earth={};
+define(['shaders'],function(shaders){
+        /*var earth={};*/
         var e=1, t=10;
         var clamp=THREE.Math.clamp;
         var deg2rad=THREE.Math.degToRad;
@@ -92,40 +91,38 @@ define(function(){
         geometry.rotateY(-Math.PI/2);
 
 
-     /*   // 测试
+         // 测试
 
 
-        var t_blur=new THREE.TextureLoader().load('textures/map_blur.jpg');
+         var t_blur=new THREE.TextureLoader().load('textures/map_blur.jpg');
 
-        var t_pattern=new THREE.TextureLoader().load('textures/pattern.png');
-        t_pattern.wrapS=THREE.RepeatWrapping;
-        t_pattern.wrapT=THREE.RepeatWrapping;
+         var t_pattern=new THREE.TextureLoader().load('textures/pattern.png');
+         t_pattern.wrapS=THREE.RepeatWrapping;
+         t_pattern.wrapT=THREE.RepeatWrapping;
 
 
-        var customUniforms=shaders.shader['grid'].uniforms;
-        customUniforms.t_blur.value=t_blur;
-        customUniforms.t_pattern.value=t_pattern;
+         var customUniforms=shaders.shader['grid'].uniforms;
+         customUniforms.t_blur.value=t_blur;
+         customUniforms.t_pattern.value=t_pattern;
 
-        var customMaterial=new THREE.ShaderMaterial(
-            {
-                uniforms: customUniforms,
-                vertexShader: shaders.shader['grid'].vertexShader,
-                fragmentShader: shaders.shader['grid'].fragmentShader,
-                side: THREE.DoubleSide
-            });
-        var earth=new THREE.Mesh(geometry, customMaterial);
-        earth.position.set(0, 0, 0);
-        earth.rotation.set(0, -Math.PI/2, 0);
-        console.log(earth);*/
+         var customMaterial=new THREE.ShaderMaterial(
+         {
+         uniforms: customUniforms,
+         vertexShader: shaders.shader['grid'].vertexShader,
+         fragmentShader: shaders.shader['grid'].fragmentShader,
+         side: THREE.DoubleSide
+         });
 
-    
-        console.log('earth.js');
+         var earth=new THREE.Mesh(geometry, customMaterial);
+         earth.position.set(0, 0, 0);
+         earth.rotation.set(0, -Math.PI/2, 0);
+
+         console.log("earth.js");
         return {
             earth: earth,
+            customUniforms:customUniforms,
             geometry: geometry
         }
-
-
 
 
 

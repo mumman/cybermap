@@ -25,53 +25,13 @@ require(['earth', 'gui'], function(earth, gui){
 
     init();
     animate();
-    var promise;
 
     function init(){
         main=document.getElementById('main');
         camera=new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 1, 2000);
         camera.position.z=30;
         scene=new THREE.Scene();
-
-
-        var ballGeometry=earth.geometry;
-        var t_blur=new THREE.TextureLoader().load('textures/map_blur.jpg');
-
-        var t_pattern=new THREE.TextureLoader().load('textures/pattern.png');
-        t_pattern.wrapS=THREE.RepeatWrapping;
-        t_pattern.wrapT=THREE.RepeatWrapping;
-
-
-        promise=new Promise(function(resolve, reject){
-            require(['shaders'], function(shaders){
-
-                customUniforms=shaders.shader['grid'].uniforms;
-                customUniforms.t_blur.value=t_blur;
-                customUniforms.t_pattern.value=t_pattern;
-
-                var customMaterial=new THREE.ShaderMaterial(
-                    {
-                        uniforms: customUniforms,
-                        vertexShader: shaders.shader['grid'].vertexShader,
-                        fragmentShader: shaders.shader['grid'].fragmentShader,
-                        side: THREE.DoubleSide
-                    });
-                var ball=new THREE.Mesh(ballGeometry, customMaterial);
-                ball.position.set(0, 0, 0);
-                ball.rotation.set(0, -Math.PI/2, 0);
-                scene.add(ball);
-                resolve();
-            });
-
-        });
-
-
-        /*
-
-         var earth_ball=earth.earth;
-         scene.add(earth_ball);
-         */
-
+        scene.add(earth.earth);
 
         /*//灯
          scene.add(new THREE.AmbientLight(0xffffff));*/
@@ -101,7 +61,7 @@ require(['earth', 'gui'], function(earth, gui){
          main.addEventListener('mousewheel', onMouseWheel, false);
 
          document.addEventListener('keydown', onDocumentKeyDown, false);*/
-
+        console.log('main.js');
     }
 
     //监听函数
@@ -195,33 +155,28 @@ require(['earth', 'gui'], function(earth, gui){
         var t=clock.getElapsedTime();
 
 
-        /*   //切换平面
-         if(gui.controls.switchPlane){
-         promise.then(function(){
-         if(customUniforms.blend.value<=1){
-         customUniforms.blend.value+=0.01;
-         }
-         });
-         }else{
-         promise.then(function(){
-         if(customUniforms.blend.value>=0){
-         customUniforms.blend.value-=0.01;
-         }
-         });
-         }
-         //切换颜色
-         if(gui.controls.changeColor){
-         promise.then(function(){
-         customUniforms.color0.value=new THREE.Vector3(0.07, 0.09, 0.07);
-         customUniforms.color1.value=new THREE.Vector3(0.36, 0.41, 0.36);
-         });
+        //切换平面
+        if(gui.controls.switchPlane){
+            if(earth.customUniforms.blend.value<=1){
+                earth.customUniforms.blend.value+=0.01;
+            }
 
-         }else{
-         promise.then(function(){
-         customUniforms.color0.value=new THREE.Vector3(0.93, 0.95, 0.93);
-         customUniforms.color1.value=new THREE.Vector3(0.42, 0.48, 0.42);
-         });
-         }*/
+        }else{
+            if(earth.customUniforms.blend.value>=0){
+                earth.customUniforms.blend.value-=0.01;
+            }
+        }
+
+        //切换颜色
+        if(gui.controls.changeColor){
+            earth.customUniforms.color0.value=new THREE.Vector3(0.07, 0.09, 0.07);
+            earth.customUniforms.color1.value=new THREE.Vector3(0.36, 0.41, 0.36);
+
+
+        }else{
+            earth.customUniforms.color0.value=new THREE.Vector3(0.93, 0.95, 0.93);
+            earth.customUniforms.color1.value=new THREE.Vector3(0.42, 0.48, 0.42);
+        }
 
 
         renderer.render(scene, camera);
