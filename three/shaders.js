@@ -198,14 +198,46 @@ define(function(){
 
 
 
+
+    /*    'corona1':{
+            uniforms:{
+                color0:{type:'v4',value:new THREE.Vector3(1,1,1,1)}
+            },
+            vertexShader:[
+                'void main()',
+                '{',
+                'gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );',
+                '}'
+            ].join('\n'),
+            fragmentShader:[
+                'uniform vec4 color0;',
+                'void main()',
+                '{',
+                'gl_FragColor = color0;',
+                '}'
+            ].join('\n')
+        },*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         'corona':{
             uniforms:{
-                color:{type:'v4',value: new THREE.Vector4( 1, 1, 1,1)},
                 color0:{type:'v3',value:new THREE.Vector3(1,1,1)},
                 color1:{type:'v3',value:new THREE.Vector3(1,1,1)},
-                bill:{type:'m3',value:new THREE.Matrix3()},
                 t_smoke:{type:'t',value:null},
-                time:{type:'f',value:0.0},
+                time:{type:'f',value:0.934},
                 zoff:{type:'f',value:0.0},
 
 
@@ -215,23 +247,37 @@ define(function(){
                 _DstBlend:{type:'f',value:0.0},
 
 
-},
-            vertexShader:[
-                'attribute vec4 vertex;',
-                'varying vec2 v_texcoord;',
+        },
+        vertexShader:[
+           /*     'uniform float zoff;',
+                 'varying vec2 v_texcoord;',
+                 'void main()',
+                 '{',
+                 'float s = 10.0 + (10.0 * position.w);',
+                 'vec3 P = vec3(s * position.xy, zoff);',
+                 'v_texcoord = position.zw;',
+                 /!*'P = bill * P;',*!/
+                 'gl_Position = projectionMatrix * modelViewMatrix * vec4(P, 1.0);',
+                 '}'
+*/
+
 
                 'void main()',
                 '{',
-                'float s = 10.0 + (10.0 * vertex.w);',
-                'vec3 P = vec3(s * vertex.xy, zoff);',
-                'P = bill * P;',
-                'gl_Position = projectionMatrix * modelViewMatrix * vec4(P, 1.0);',
-                'v_texcoord = vertex.zw;',
+                'float s = 10.0 + (10.0 * position.y);',
+
+
+
+                'gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );',
                 '}'
+
             ].join('\n'),
             fragmentShader:[
-
-                'uniform vec4 color;',
+                /*'varying vec2 v_texcoord;',
+                'uniform vec3 color0;',
+                'uniform vec3 color1;',
+                'uniform float time;',
+                'uniform sampler2D t_smoke;',
                 'void main()',
                 '{',
                 'vec2 uv = vec2(5.0*v_texcoord.x + 0.01*time, 0.8 - 1.5*v_texcoord.y);',
@@ -241,7 +287,15 @@ define(function(){
                 'float t = pow(v_texcoord.y, 0.25);',
                 'gl_FragColor.rgb = mix(color0, color1, t) + 0.3*smoke;',
                 'gl_FragColor.a = 1.0;',
-                '}'
+                '}'*/
+
+
+                 'uniform vec3 color0;',
+                 'void main()',
+                 '{',
+                 'gl_FragColor.rgb= color0;',
+                 '}'
+
             ].join('\n')
         }
 

@@ -118,7 +118,7 @@ define(['shaders'], function(shaders){
 
     // buffers
     var indices = new THREE.BufferAttribute( new ( indexCount > 65535 ? Uint32Array : Uint16Array )( indexCount ) , 1 );
-    var vertices = new THREE.BufferAttribute( new Float32Array( vertexCount * 3 ), 3 );
+    var vertices = new THREE.BufferAttribute( new Float32Array( vertexCount * 4 ), 4 );
     var normals = new THREE.BufferAttribute( new Float32Array( vertexCount * 3 ), 3 );
     var uvs = new THREE.BufferAttribute( new Float32Array( vertexCount * 2 ), 2 );
 
@@ -131,62 +131,42 @@ define(['shaders'], function(shaders){
     // generate vertices, normals and uvs
 
     // values are generate from the inside of the ring to the outside
-
-/*    for ( var j = 0; j <= 1; j ++ ) {
+/*
+    for ( var j = 0; j <= 1; j ++ ) {*/
 
         for ( var n = 0; n <= thetaSegments; n ++ ) {
 
+            var o=Math.PI*2*n/128;
 
+             vertex.x=Math.cos(o);
+             vertex.y =Math.sin(o);
+             vertex.z =n/128+1;
 
-
-            segment = n / thetaSegments * thetaLength;
+          /*  segment = n / thetaSegments * thetaLength;
 
             // vertex
             vertex.x = innerRadius * Math.cos( segment );
-            vertex.y = innerRadius * Math.sin( segment );
+            vertex.y = innerRadius * Math.sin( segment );*/
 
-            vertices.setXYZ( index, vertex.x, vertex.y, vertex.z,0 );
-            vertices.setXYZ( index, vertex.x, vertex.y, vertex.z,1 );
-
+            vertices.setXYZW( index, vertex.x, vertex.y, vertex.z,0 );
+            vertices.setXYZW( index+1, vertex.x, vertex.y, vertex.z,1 );
 
             // uv
             uvs.setXY( index, 0, 0 );
-            uvs.setXY( index, 1, 0);
+            uvs.setXY( index+1, 1, 0);
 
             // increase index
             index++;
 
         }
 
+/*
         // increase the radius for next row of vertices
         innerRadius += radiusStep;
 
-    }*/
-
-
-
-    for(var r=128,n=0;n<r+1;n++){
-        var o=Math.PI*2*n/r;
-        var a=n/r+1;
-        var i=Math.cos(o);
-        var u=Math.sin(o);
-        vertices.setXYZ(index, i,u,a,0);
-        vertices.setXYZ(index+1, i,u,a,1);
-        uvs.setXYZ(index,0,0);
-        uvs.setXY(index+1,1,0);
-  /*      vertices.push(index);*/
-        index++;
     }
 
-
-
-
-
-
-
-
-
-
+*/
 
 
 
@@ -213,13 +193,7 @@ define(['shaders'], function(shaders){
             indices.setX( indexOffset, d ); indexOffset++;
         }
 
-    for (int n = 0; n < 128; ++n)
-    {
-        corona_index.Add(n * 2 );
-        corona_index.Add(n * 2 + 1);
-        corona_index.Add(n * 2 + 3);
-        corona_index.Add(n * 2 + 2);
-    }
+
 
 
     // build geometry
@@ -231,8 +205,34 @@ define(['shaders'], function(shaders){
 
 
 
-    var material=new THREE.MeshBasicMaterial({ color: 0xffffff,wireframe:true});
-    corona=new THREE.Mesh(geometry, material);
+
+    /*var material=new THREE.MeshBasicMaterial({ color: 0xffffff,wireframe:true});*/
+
+
+    //材质
+    var t_smoke=new THREE.TextureLoader().load('textures/smoke.jpg');
+        t_smoke.wrapS=THREE.RepeatWrapping;
+        t_smoke.wrapT=THREE.ClampToEdgeWrapping;
+
+    var customUniforms=shaders.shader['corona'].uniforms;
+ /*   customUniforms.t_smoke.value=t_smoke;*/
+
+    var material=new THREE.ShaderMaterial(
+        {
+            uniforms: customUniforms,
+
+            vertexShader: shaders.shader['corona'].vertexShader,
+            fragmentShader: shaders.shader['corona'].fragmentShader,
+            side: THREE.DoubleSide
+
+        });
+
+
+
+
+    var corona=new THREE.Mesh(geometry, material);
+
+
 
 
 
