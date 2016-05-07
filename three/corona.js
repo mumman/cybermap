@@ -132,7 +132,7 @@ define(['shaders'], function(shaders){
 
     // values are generate from the inside of the ring to the outside
 
-    for ( var j = 0; j <= 1; j ++ ) {
+/*    for ( var j = 0; j <= 1; j ++ ) {
 
         for ( var n = 0; n <= thetaSegments; n ++ ) {
 
@@ -161,7 +161,36 @@ define(['shaders'], function(shaders){
         // increase the radius for next row of vertices
         innerRadius += radiusStep;
 
+    }*/
+
+
+
+    for(var r=128,n=0;n<r+1;n++){
+        var o=Math.PI*2*n/r;
+        var a=n/r+1;
+        var i=Math.cos(o);
+        var u=Math.sin(o);
+        vertices.setXYZ(index, i,u,a,0);
+        vertices.setXYZ(index+1, i,u,a,1);
+        uvs.setXYZ(index,0,0);
+        uvs.setXY(index+1,1,0);
+  /*      vertices.push(index);*/
+        index++;
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     // generate indices
 
@@ -184,6 +213,13 @@ define(['shaders'], function(shaders){
             indices.setX( indexOffset, d ); indexOffset++;
         }
 
+    for (int n = 0; n < 128; ++n)
+    {
+        corona_index.Add(n * 2 );
+        corona_index.Add(n * 2 + 1);
+        corona_index.Add(n * 2 + 3);
+        corona_index.Add(n * 2 + 2);
+    }
 
 
     // build geometry
