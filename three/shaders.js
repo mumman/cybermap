@@ -206,10 +206,16 @@ define(function(){
                 bill:{type:'m3',value:new THREE.Matrix3()},
                 t_smoke:{type:'t',value:null},
                 time:{type:'f',value:0.0},
-                zoff:{type:'f',value:0.0}
+                zoff:{type:'f',value:0.0},
 
 
-            },
+
+
+                _SrcBlend:{type:'f',value:0.0},
+                _DstBlend:{type:'f',value:0.0},
+
+
+},
             vertexShader:[
                 'attribute vec4 vertex;',
                 'varying vec2 v_texcoord;',
