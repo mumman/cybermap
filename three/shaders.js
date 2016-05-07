@@ -234,8 +234,8 @@ define(function(){
 
         'corona':{
             uniforms:{
-                color0:{type:'v3',value:new THREE.Vector3(1,1,1)},
-                color1:{type:'v3',value:new THREE.Vector3(1,1,1)},
+                color0:{type:'v3',value:new THREE.Vector3(0.07, 0.25, 0.16)},
+                color1:{type:'v3',value:new THREE.Vector3(0,0,0)},
                 t_smoke:{type:'t',value:null},
                 time:{type:'f',value:0.934},
                 zoff:{type:'f',value:0.0},
@@ -251,6 +251,7 @@ define(function(){
         vertexShader:[
            /*     'uniform float zoff;',
                  'varying vec2 v_texcoord;',
+            'attribute vec3 position;
                  'void main()',
                  '{',
                  'float s = 10.0 + (10.0 * position.w);',
@@ -260,41 +261,41 @@ define(function(){
                  'gl_Position = projectionMatrix * modelViewMatrix * vec4(P, 1.0);',
                  '}'
 */
-
-
+                'uniform float zoff;',
+                'attribute vec4 positionW;',
+                'varying vec2 v_texcoord;',
                 'void main()',
                 '{',
-                'float s = 10.0 + (10.0 * position.y);',
-
-
-
-                'gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );',
+                'float s = 10.0 + (10.0 * positionW.w);',
+                'vec3 p = vec3(s * positionW.xy, zoff);',
+                'v_texcoord = positionW.zw;',
+                'gl_Position = projectionMatrix * modelViewMatrix * vec4( p, 1.0 );',
                 '}'
 
             ].join('\n'),
             fragmentShader:[
-                /*'varying vec2 v_texcoord;',
+                'varying vec2 v_texcoord;',
                 'uniform vec3 color0;',
                 'uniform vec3 color1;',
                 'uniform float time;',
                 'uniform sampler2D t_smoke;',
                 'void main()',
                 '{',
-                'vec2 uv = vec2(5.0*v_texcoord.x + 0.01*time, 0.8 - 1.5*v_texcoord.y);',
-                'float smoke = texture2D(t_smoke, uv).r;',
-                'uv = vec2(3.0*v_texcoord.x - 0.007*time, 0.9 - 0.5*v_texcoord.y);',
-                'smoke *= 1.5*texture2D(t_smoke, uv).r;',
+                'vec2 uv1 = vec2(5.0*v_texcoord.x + 0.01*time, 0.8 - 1.5*v_texcoord.y);',
+                'float smoke = texture2D(t_smoke, uv1).r;',
+                'uv1 = vec2(3.0*v_texcoord.x - 0.007*time, 0.9 - 0.5*v_texcoord.y);',
+                'smoke *= 1.5*texture2D(t_smoke, uv1).r;',
                 'float t = pow(v_texcoord.y, 0.25);',
                 'gl_FragColor.rgb = mix(color0, color1, t) + 0.3*smoke;',
                 'gl_FragColor.a = 1.0;',
-                '}'*/
+                '}'
 
 
-                 'uniform vec3 color0;',
+               /*  'uniform vec3 color0;',
                  'void main()',
                  '{',
                  'gl_FragColor.rgb= color0;',
-                 '}'
+                 '}'*/
 
             ].join('\n')
         }

@@ -117,8 +117,7 @@ define(['shaders'], function(shaders){
     console.log("earth.js");
     return {
         earth: earth,
-        customUniforms: customUniforms,
-        geometry: geometry
+        customUniforms: customUniforms
     }
 
 

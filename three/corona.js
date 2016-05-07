@@ -118,7 +118,8 @@ define(['shaders'], function(shaders){
 
     // buffers
     var indices = new THREE.BufferAttribute( new ( indexCount > 65535 ? Uint32Array : Uint16Array )( indexCount ) , 1 );
-    var vertices = new THREE.BufferAttribute( new Float32Array( vertexCount * 4 ), 4 );
+    var vertices = new THREE.BufferAttribute( new Float32Array( vertexCount * 3 ), 3 );
+    var verticesW = new THREE.BufferAttribute( new Float32Array( vertexCount * 4 ), 4 );
     var normals = new THREE.BufferAttribute( new Float32Array( vertexCount * 3 ), 3 );
     var uvs = new THREE.BufferAttribute( new Float32Array( vertexCount * 2 ), 2 );
 
@@ -148,8 +149,11 @@ define(['shaders'], function(shaders){
             vertex.x = innerRadius * Math.cos( segment );
             vertex.y = innerRadius * Math.sin( segment );*/
 
-            vertices.setXYZW( index, vertex.x, vertex.y, vertex.z,0 );
-            vertices.setXYZW( index+1, vertex.x, vertex.y, vertex.z,1 );
+            vertices.setXYZ( index, vertex.x, vertex.y, vertex.z );
+            vertices.setXYZ( index+1, vertex.x, vertex.y, vertex.z );
+
+            verticesW.setXYZW( index+1, vertex.x, vertex.y, vertex.z,0 );
+            verticesW.setXYZW( index+1, vertex.x, vertex.y, vertex.z,1 );
 
             // uv
             uvs.setXY( index, 0, 0 );
@@ -200,6 +204,7 @@ define(['shaders'], function(shaders){
 
     geometry.setIndex( indices );
     geometry.addAttribute( 'position', vertices );
+    geometry.addAttribute( 'positionW', verticesW );
     geometry.addAttribute( 'normal', normals );
     geometry.addAttribute( 'uv', uvs );
 
@@ -215,12 +220,11 @@ define(['shaders'], function(shaders){
         t_smoke.wrapT=THREE.ClampToEdgeWrapping;
 
     var customUniforms=shaders.shader['corona'].uniforms;
- /*   customUniforms.t_smoke.value=t_smoke;*/
+    customUniforms.t_smoke.value=t_smoke;
 
     var material=new THREE.ShaderMaterial(
         {
             uniforms: customUniforms,
-
             vertexShader: shaders.shader['corona'].vertexShader,
             fragmentShader: shaders.shader['corona'].fragmentShader,
             side: THREE.DoubleSide
@@ -235,24 +239,10 @@ define(['shaders'], function(shaders){
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     console.log('corona.js');
    return {
-       corona:corona
+       corona:corona,
+       customUniforms: customUniforms
 
    }
 });

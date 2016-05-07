@@ -35,6 +35,12 @@ require(['earth', 'stars', 'corona','gui'], function(earth, stars,corona, gui){
         scene.add(stars.stars);
         scene.add(corona.corona);
 
+
+      /*  var geometry = new THREE.BoxGeometry( 10, 10, 10 );
+        var material = new THREE.MeshBasicMaterial( {color: 0xffffff} );
+        var cube = new THREE.Mesh( geometry, material );
+        scene.add( cube );*/
+
         /*//灯
          scene.add(new THREE.AmbientLight(0xffffff));*/
 
@@ -146,6 +152,7 @@ require(['earth', 'stars', 'corona','gui'], function(earth, stars,corona, gui){
      }
      */
 
+
     function animate(){
         requestAnimationFrame(animate);
         render();
@@ -173,13 +180,18 @@ require(['earth', 'stars', 'corona','gui'], function(earth, stars,corona, gui){
         if(gui.controls.changeColor){
             earth.customUniforms.color0.value=new THREE.Vector3(0.07, 0.09, 0.07);
             earth.customUniforms.color1.value=new THREE.Vector3(0.36, 0.41, 0.36);
+            corona.customUniforms.color1.value=new THREE.Vector3(0,0,0);
 
 
         }else{
             earth.customUniforms.color0.value=new THREE.Vector3(0.93, 0.95, 0.93);
             earth.customUniforms.color1.value=new THREE.Vector3(0.42, 0.48, 0.42);
+            corona.customUniforms.color1.value=new THREE.Vector3(1,1,1);
         }
 
+
+        //国定光晕
+        corona.corona.lookAt(camera.position);
 
         renderer.render(scene, camera);
 
