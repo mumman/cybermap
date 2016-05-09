@@ -105,50 +105,31 @@ define(['shaders'], function(shaders){
 
     var corona;
     var geometry=new THREE.BufferGeometry();
-
-
-    var innerRadius=10.35;
-    var outerRadius=15;
     var thetaSegments=128;
-    var thetaLength=6.3;
 
     // these are used to calculate buffer length
     var vertexCount = ( thetaSegments + 1 ) * ( 1 + 1 );
-    var indexCount = thetaSegments * 1 * 2 * 3;
 
     // buffers
-    var indices = new THREE.BufferAttribute( new ( indexCount > 65535 ? Uint32Array : Uint16Array )( indexCount ) , 1 );
     var vertices = new THREE.BufferAttribute( new Float32Array( vertexCount * 3 ), 3 );
     var verticesW = new THREE.BufferAttribute( new Float32Array( vertexCount * 4 ), 4 );
     var normals = new THREE.BufferAttribute( new Float32Array( vertexCount * 3 ), 3 );
     var uvs = new THREE.BufferAttribute( new Float32Array( vertexCount * 2 ), 2 );
 
     // some helper variables
-    var index = 0, indexOffset = 0, segment;
-    var radiusStep = ( ( outerRadius - innerRadius ) / 1 );
+    var index = 0;
     var vertex = new THREE.Vector3();
     var uv = new THREE.Vector2();
-
-    // generate vertices, normals and uvs
-
-    // values are generate from the inside of the ring to the outside
-/*
-    for ( var j = 0; j <= 1; j ++ ) {*/
 
         for ( var n = 0; n <= thetaSegments; n ++ ) {
 
             var o=Math.PI*2*n/128;
 
-             vertex.x=Math.cos(o);
-             vertex.y =Math.sin(o);
-             vertex.z =n/128+1;
-
-          /*  segment = n / thetaSegments * thetaLength;
-
             // vertex
-            vertex.x = innerRadius * Math.cos( segment );
-            vertex.y = innerRadius * Math.sin( segment );*/
-
+            vertex.x =  Math.cos( o );
+            vertex.y =  Math.sin( o );
+            vertex.z =n/128+1;
+           /* vertex.z =0;*/
             vertices.setXYZ( index, vertex.x, vertex.y, vertex.z );
             vertices.setXYZ( index+1, vertex.x, vertex.y, vertex.z );
 
@@ -161,40 +142,26 @@ define(['shaders'], function(shaders){
 
             // increase index
             index++;
-
         }
-
-/*
-        // increase the radius for next row of vertices
-        innerRadius += radiusStep;
-
-    }
-
-*/
-
-
-
 
 
     // generate indices
 
 
-
-        for ( i = 0; i < 128; i ++ ) {
-            // indices
+        var indices=[];
+        for ( var i = 0; i < 128; i ++ ) {
+         /*  var a= i * 2;
+           var b= i * 2 + 1;
+           var c= i * 2 + 3;
+           var d= i * 2 + 2;*/
             var a = i;
             var b = i + 128 + 1;
             var c = i + 128 + 2;
             var d = i + 1;
-            // face one
-            indices.setX( indexOffset, a ); indexOffset++;
-            indices.setX( indexOffset, b ); indexOffset++;
-            indices.setX( indexOffset, c ); indexOffset++;
 
-            // face two
-            indices.setX( indexOffset, a ); indexOffset++;
-            indices.setX( indexOffset, c ); indexOffset++;
-            indices.setX( indexOffset, d ); indexOffset++;
+            indices.push(a,b,c);
+            indices.push(a,c,d);
+
         }
 
 
@@ -217,18 +184,15 @@ define(['shaders'], function(shaders){
 
 
     // build geometry
-
-    geometry.setIndex( indices );
+    geometry.setIndex(new ( vertices.count>65535 ? THREE.Uint32Attribute : THREE.Uint16Attribute )(indices, 1));
     geometry.addAttribute( 'position', vertices );
     geometry.addAttribute( 'positionW', verticesW );
     geometry.addAttribute( 'normal', normals );
     geometry.addAttribute( 'uv', uvs );
 
 
-
-
-    /*var material=new THREE.MeshBasicMaterial({ color: 0xffffff,wireframe:true});*/
-
+/*
+    var material=new THREE.MeshBasicMaterial({ color: 0xffffff,wireframe:true});*/
 
     //材质
     var t_smoke=new THREE.TextureLoader().load('textures/smoke.jpg');
@@ -258,7 +222,7 @@ define(['shaders'], function(shaders){
     console.log('corona.js');
    return {
        corona:corona,
-       customUniforms: customUniforms
+      /* customUniforms: customUniforms*/
 
    }
 });
