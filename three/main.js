@@ -180,18 +180,18 @@ require(['earth', 'stars', 'corona','gui'], function(earth, stars,corona, gui){
         if(gui.controls.changeColor){
             earth.customUniforms.color0.value=new THREE.Vector3(0.07, 0.09, 0.07);
             earth.customUniforms.color1.value=new THREE.Vector3(0.36, 0.41, 0.36);
-          /*  corona.customUniforms.color1.value=new THREE.Vector3(0,0,0);*/
+            corona.customUniforms.color1.value=new THREE.Vector3(0,0,0);
 
 
         }else{
             earth.customUniforms.color0.value=new THREE.Vector3(0.93, 0.95, 0.93);
             earth.customUniforms.color1.value=new THREE.Vector3(0.42, 0.48, 0.42);
-            /*corona.customUniforms.color1.value=new THREE.Vector3(1,1,1);*/
+            corona.customUniforms.color1.value=new THREE.Vector3(1,1,1);
         }
 
 
         //固定光晕
-        /*corona.corona.lookAt(camera.position);*/
+        corona.corona.lookAt(camera.position);
 
         renderer.render(scene, camera);
 

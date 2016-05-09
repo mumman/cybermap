@@ -244,7 +244,7 @@ define(function(){
 
 
                 _SrcBlend:{type:'f',value:0.0},
-                _DstBlend:{type:'f',value:0.0},
+                _DstBlend:{type:'f',value:0.0}
 
 
         },
@@ -263,6 +263,7 @@ define(function(){
 */
                 'uniform float zoff;',
                 'attribute vec4 positionW;',
+                'attribute vec4 positionW1;',
                 'varying vec2 v_texcoord;',
                 'void main()',
                 '{',
@@ -270,6 +271,9 @@ define(function(){
                 'vec3 p = vec3(s * positionW.xy, zoff);',
                 'v_texcoord = positionW.zw;',
                 'gl_Position = projectionMatrix * modelViewMatrix * vec4( p, 1.0 );',
+
+               /* 'v_texcoord = positionW.zw;',
+                'gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );',*/
                 '}'
 
             ].join('\n'),
