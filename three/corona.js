@@ -200,6 +200,22 @@ define(['shaders'], function(shaders){
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     // build geometry
 
     geometry.setIndex( indices );
