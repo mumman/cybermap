@@ -263,7 +263,6 @@ define(function(){
 */
                 'uniform float zoff;',
                 'attribute vec4 positionW;',
-                'attribute vec4 positionW1;',
                 'varying vec2 v_texcoord;',
                 'void main()',
                 '{',
