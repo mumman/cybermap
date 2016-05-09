@@ -81,7 +81,7 @@ require(['earth', 'stars', 'corona','gui'], function(earth, stars,corona, gui){
     }
 
     /*
-
+       控制
      function onMouseDown(event){
      event.preventDefault();
 
@@ -190,7 +190,7 @@ require(['earth', 'stars', 'corona','gui'], function(earth, stars,corona, gui){
         }
 
 
-        //国定光晕
+        //固定光晕
         corona.corona.lookAt(camera.position);
 
         renderer.render(scene, camera);
