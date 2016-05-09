@@ -68,19 +68,6 @@ define(['shaders'], function(shaders){
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
         }
 
     // build geometry
@@ -112,12 +99,6 @@ define(['shaders'], function(shaders){
         });
 
     var corona=new THREE.Mesh(geometry, material);
-
-
-
-
-
-
 
 
 
@@ -304,19 +285,6 @@ define(['shaders'], function(shaders){
 
 
 */
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
