@@ -219,19 +219,6 @@ define(function(){
         },*/
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
         'corona':{
             uniforms:{
                 color0:{type:'v3',value:new THREE.Vector3(0.07, 0.25, 0.16)},
