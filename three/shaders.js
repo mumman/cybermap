@@ -229,7 +229,6 @@ define(function(){
 
 
 
-
                 _SrcBlend:{type:'f',value:0.0},
                 _DstBlend:{type:'f',value:0.0}
 
@@ -334,8 +333,6 @@ define(function(){
     /*    _SrcBlend ("SrcBlend", Int) = 5 // SrcAlpha
     _DstBlend ("DstBlend", Int) = 10 // OneMinusSrcAlpha
     _Fade ("Fade", Float) = 1.0*/
-
-
 
 
 
