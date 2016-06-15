@@ -599,7 +599,7 @@ function make_event_emitter(e) {
 
 		function Fe(e) {
 			return null === e
-		}
+		}f
 
 		function ke(e) {
 			return 'number' == typeof e || e && 'object' == typeof e && Mr.call(e) == W || !1
@@ -5421,9 +5421,9 @@ var GTW = GTW || {};
 		this.next_fetch_time = 0,
 		this.kevents = []
 	}
-	var n = 60000,/*Ò»·ÖÖÓºÁÃëÊý*/
-		o = 60 * n,/*Ò»Ð¡Ê±ºÁÃëÊý*/
-		a = 24 * o;/*Ò»ÌìºÁÃëÊý*/
+	var n = 60000,/*Ò»ï¿½ï¿½ï¿½Óºï¿½ï¿½ï¿½ï¿½ï¿½*/
+		o = 60 * n,/*Ò»Ð¡Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½*/
+		a = 24 * o;/*Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½*/
 	t.prototype.next_event = function() {
 		var t = Math.max(0, this.end_time - this.next_event_time),
 			r = t / this.remaining,
@@ -5493,7 +5493,7 @@ var GTW = GTW || {};
 				var c = Base64.decode(t.totals8, Uint32Array);
 				GTW.update_counters(c)
 			}
-			var l = Math.floor(e / a) * a + r * o;/*µ±Ç°Ê±¼äµãµÄÆðÊ¼ºÁÃëÊý*/
+			var l = Math.floor(e / a) * a + r * o;/*ï¿½ï¿½Ç°Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½*/
 			if (n.clear_events(), n.add_events(i, l), t.events8) {
 				var s = Base64.decode(t.events8, Uint32Array);
 				n.add_ddos_events(s, l)
@@ -5521,8 +5521,8 @@ var GTW = GTW || {};
 				}
 			})
 		}
-		var r = Math.floor(e / o % 24);/*µ±Ç°¼¸µãÖÓ,¸ñÁÖÊ±¼ä*/
-		this.next_fetch_time = (1 + Math.floor(e / o)) * o; /*ÏÂÒ»µã¿ªÊ¼µÄºÁÃëÊý*/
+		var r = Math.floor(e / o % 24);/*ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½*/
+		this.next_fetch_time = (1 + Math.floor(e / o)) * o; /*ï¿½ï¿½Ò»ï¿½ã¿ªÊ¼ï¿½Äºï¿½ï¿½ï¿½ï¿½ï¿½*/
 		var n = this,
 			i = 'assets/data/events/' + r + '.json';
 		$.getJSON(i, t)
@@ -5557,7 +5557,7 @@ var GTW = GTW || {};
 		r
 	}
 
-	function t(t, r, n, o, a) {/*icon½á¹¹¶¨Òå*/
+	function t(t, r, n, o, a) {/*iconï¿½á¹¹ï¿½ï¿½ï¿½ï¿½*/
 		function i(t) {
 			return {
 				f: e(t),
@@ -5823,7 +5823,7 @@ var GTW = GTW || {};
 			this.count = 0
 		}
 
-		function r(r) {/*Ã¿¸ösystemµÄshape*/
+		function r(r) {/*Ã¿ï¿½ï¿½systemï¿½ï¿½shape*/
 			var o = new t;/*5795*/
 			o.offset = n.length / 3;
 			var a = 0 > r;
@@ -5843,7 +5843,7 @@ var GTW = GTW || {};
 		var n = [],
 			o = [];
 		t.prototype.draw = function() {
-			gl.drawArrays(gl.LINES, this.offset, this.count)/*¸÷ÖÖÐÎ×´¹â»·shape icon*/
+			gl.drawArrays(gl.LINES, this.offset, this.count)/*ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´ï¿½â»·shape icon*/
 		},
 		GTW.systems_foreach(function(e) {
 			var t = r(e.n_sides);
@@ -5877,7 +5877,7 @@ var GTW = GTW || {};
 						n.uniform3fv('color', t.color);
 						var a = 2 * g,
 							i = a * t.index;
-						gl.drawArrays(gl.TRIANGLE_STRIP, i, a)/*¹ì¼£*/
+						gl.drawArrays(gl.TRIANGLE_STRIP, i, a)/*ï¿½ì¼£*/
 					}
 				}
 			})
@@ -5895,8 +5895,8 @@ var GTW = GTW || {};
 					if (o > 4) return void(t.alive = !1);
 					/*if (t.index != 0) return;*/
 					n.uniform3fv('color', t.color),
-					t.has_source && t.draw_source_impact && 1 > o && (n.uniformMatrix4fv('mat', t.source_mat), n.uniform1f('time', o), gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4)),/*¹¥»÷Ô´*/
-					t.has_target && o >= 1 && (n.uniformMatrix4fv('mat', t.target_mat), n.uniform1f('time', (o - 1) / 3), gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4)/*¹¥»÷Ä¿±ê*/)
+					t.has_source && t.draw_source_impact && 1 > o && (n.uniformMatrix4fv('mat', t.source_mat), n.uniform1f('time', o), gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4)),/*ï¿½ï¿½ï¿½ï¿½Ô´*/
+					t.has_target && o >= 1 && (n.uniformMatrix4fv('mat', t.target_mat), n.uniform1f('time', (o - 1) / 3), gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4)/*ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½*/)
 				}
 			})
 		}
@@ -5908,7 +5908,7 @@ var GTW = GTW || {};
 			_.each(this.missiles, function(r) {
 				if (r.alive/* && t.index == 0 */) {
 					var o = e.time - r.start_time;
-					r.has_target && o >= 1 && 2 > o && (n.uniform3fv('color', r.color), n.uniformMatrix4fv('mat', r.target_mat), n.uniform1f('time', o - 1), gl.drawArrays(gl.TRIANGLE_STRIP, 0, t.n_cone_verts)/*Ô²×¶¹âÖù*/)
+					r.has_target && o >= 1 && 2 > o && (n.uniform3fv('color', r.color), n.uniformMatrix4fv('mat', r.target_mat), n.uniform1f('time', o - 1), gl.drawArrays(gl.TRIANGLE_STRIP, 0, t.n_cone_verts)/*Ô²×¶ï¿½ï¿½ï¿½ï¿½*/)
 				}
 			})
 		}
@@ -6016,7 +6016,7 @@ function() {
 			},
 			this.mvp = mat4.create()
 		}
-		return e.prototype.draw = function(e) {/*»­±³¾°ÐÇ¿Õ*/
+		return e.prototype.draw = function(e) {/*ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç¿ï¿½*/
 			gl.disable(gl.DEPTH_TEST),
 			gl.enable(gl.BLEND),
 			gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
@@ -6259,9 +6259,9 @@ function() {
 			vec3.forEach(n, y, 9, 0, function(e) {
 				vec3.normalize(e, e)
 			}),
-			this.buffers.map.vert = webgl.makeVertexBuffer(new Float32Array(n)), /*¹ú¼Ò±íÃæµÄvertex buffer*/
-			this.buffers.map.face = webgl.makeElementBuffer(new Uint16Array(s)),/*¹ú¼Ò±íÃæµÄindex buffer*/
-			this.buffers.map.line = webgl.makeElementBuffer(new Uint16Array(o.lines)),/*¹ú¼Ò±ß½çÏßvertex buffer*/
+			this.buffers.map.vert = webgl.makeVertexBuffer(new Float32Array(n)), /*ï¿½ï¿½ï¿½Ò±ï¿½ï¿½ï¿½ï¿½vertex buffer*/
+			this.buffers.map.face = webgl.makeElementBuffer(new Uint16Array(s)),/*ï¿½ï¿½ï¿½Ò±ï¿½ï¿½ï¿½ï¿½index buffer*/
+			this.buffers.map.line = webgl.makeElementBuffer(new Uint16Array(o.lines)),/*ï¿½ï¿½ï¿½Ò±ß½ï¿½ï¿½ï¿½vertex buffer*/
 			this.face_count = o.faces.length,
 			this.line_count = o.lines.length,
 			this.map_vert_stride_bytes = 56
@@ -6296,7 +6296,7 @@ function() {
 					f.uniform4f('color', 1, 1, 1, 1),
 					webgl.bindElementBuffer(this.buffers.grid.elem),
 					f.uniform1f('offset_x', 0),
-					gl.drawElements(gl.TRIANGLES, this.grid_elem_count, gl.UNSIGNED_SHORT, 0),/*»­ÇòÃæ*/
+					gl.drawElements(gl.TRIANGLES, this.grid_elem_count, gl.UNSIGNED_SHORT, 0),/*ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½*/
 					l && (f.uniform1f('offset_x', -20),
                     /*gl.drawElements(gl.TRIANGLES, this.grid_elem_count, gl.UNSIGNED_SHORT, 0),*/ f.uniform1f('offset_x', 20)
                     /*,gl.drawElements(gl.TRIANGLES, this.grid_elem_count, gl.UNSIGNED_SHORT, 0)*/)
@@ -6315,28 +6315,28 @@ function() {
 						f.uniform1f('height', t == s.extruded_country_index ? n : 0),
 						f.uniform1f('tone', e.tone),
 						f.uniform1f('offset_x', 0),
-						/*»­Ã¿¸ö¹ú¼ÒµÄµØÃæ*/
+						/*ï¿½ï¿½Ã¿ï¿½ï¿½ï¿½ï¿½ï¿½ÒµÄµï¿½ï¿½ï¿½*/
 						gl.drawElements(gl.TRIANGLES, e.face_count, gl.UNSIGNED_SHORT, e.face_offset << 1),
-						l/*µ±lÎªtrueÊ±£¬ºóÃæÀ¨ºÅÄÚµÄ´úÂë²Å»áÖ´ÐÐ*/ && (f.uniform1f('offset_x', -20),
-						/*gl.drawElements(gl.TRIANGLES, e.face_count, gl.UNSIGNED_SHORT, e.face_offset << 1),*//*»­Æ½ÃæÊ±ÓÒ²àµØÍ¼Ã¿¸ö¹ú¼ÒµÄµØÃæ*/
+						l/*ï¿½ï¿½lÎªtrueÊ±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÚµÄ´ï¿½ï¿½ï¿½Å»ï¿½Ö´ï¿½ï¿½*/ && (f.uniform1f('offset_x', -20),
+						/*gl.drawElements(gl.TRIANGLES, e.face_count, gl.UNSIGNED_SHORT, e.face_offset << 1),*//*ï¿½ï¿½Æ½ï¿½ï¿½Ê±ï¿½Ò²ï¿½ï¿½Í¼Ã¿ï¿½ï¿½ï¿½ï¿½ï¿½ÒµÄµï¿½ï¿½ï¿½*/
                         f.uniform1f('offset_x', 20),
-						gl.drawElements(gl.TRIANGLES, e.face_count, gl.UNSIGNED_SHORT, e.face_offset << 1))/*»­Æ½ÃæÊ±×ó²àÃ¿¸ö¹ú¼ÒµÄµØÃæ*/
+						gl.drawElements(gl.TRIANGLES, e.face_count, gl.UNSIGNED_SHORT, e.face_offset << 1))/*ï¿½ï¿½Æ½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½Ã¿ï¿½ï¿½ï¿½ï¿½ï¿½ÒµÄµï¿½ï¿½ï¿½*/
 					}), gl.depthFunc(gl.LESS), i && (gl.disable(gl.CULL_FACE), f.uniform1f('tone', 0.5), f.uniform1f('offset_x', 0), 
-					/*gl.drawElements(gl.TRIANGLES, this.coast_count, gl.UNSIGNED_SHORT, this.coast_start << 1),*//*»­¹ú¼ÒµÄÄ£ÐÍµÄºñ¶È²¿·Ö*/ 
-                    l/*µ±lÎªtrueÊ±£¬ºóÃæÀ¨ºÅÄÚµÄ´úÂë²Å»áÖ´ÐÐ*/ && (f.uniform1f('offset_x', -20),
-					gl.drawElements(gl.TRIANGLES, this.coast_count, gl.UNSIGNED_SHORT, this.coast_start << 1)/*»­Æ½ÃæÊ±ÓÒ²à¹ú¼ÒµÄÄ£ÐÍºñ¶È²¿·Ö*/, 
+					/*gl.drawElements(gl.TRIANGLES, this.coast_count, gl.UNSIGNED_SHORT, this.coast_start << 1),*//*ï¿½ï¿½ï¿½ï¿½ï¿½Òµï¿½Ä£ï¿½ÍµÄºï¿½È²ï¿½ï¿½ï¿½*/ 
+                    l/*ï¿½ï¿½lÎªtrueÊ±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÚµÄ´ï¿½ï¿½ï¿½Å»ï¿½Ö´ï¿½ï¿½*/ && (f.uniform1f('offset_x', -20),
+					gl.drawElements(gl.TRIANGLES, this.coast_count, gl.UNSIGNED_SHORT, this.coast_start << 1)/*ï¿½ï¿½Æ½ï¿½ï¿½Ê±ï¿½Ò²ï¿½ï¿½ï¿½Òµï¿½Ä£ï¿½Íºï¿½È²ï¿½ï¿½ï¿½*/, 
                     f.uniform1f('offset_x', 20),
-					gl.drawElements(gl.TRIANGLES, this.coast_count, gl.UNSIGNED_SHORT, this.coast_start << 1)))/*»­Æ½ÃæÊ±×ó²à¹ú¼ÒµÄÄ£ÐÍºñ¶È²¿·Ö*/, gl.enable(gl.BLEND), gl.blendFunc(gl.SRC_ALPHA, gl.ONE), gl.disable(gl.DEPTH_TEST), gl.enable(gl.CULL_FACE), e.pick_index >= 0) 
+					gl.drawElements(gl.TRIANGLES, this.coast_count, gl.UNSIGNED_SHORT, this.coast_start << 1)))/*ï¿½ï¿½Æ½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½Òµï¿½Ä£ï¿½Íºï¿½È²ï¿½ï¿½ï¿½*/, gl.enable(gl.BLEND), gl.blendFunc(gl.SRC_ALPHA, gl.ONE), gl.disable(gl.DEPTH_TEST), gl.enable(gl.CULL_FACE), e.pick_index >= 0) 
 					{
 						var p = this.countries[e.pick_index];
 						f.uniform1f('tone', 1),
 						f.uniform1f('alpha', 0.5),
 						f.uniform1f('offset_x', 0),
 						f.uniform1f('height', e.pick_index == s.extruded_country_index ? n : 0)
-						/*,gl.drawElements(gl.TRIANGLES, p.face_count, gl.UNSIGNED_SHORT, p.face_offset << 1)*//*»­Ñ¡ÖÐ¹ú¼ÒµÄ¸ßÁÁ±íÃæ*/
+						/*,gl.drawElements(gl.TRIANGLES, p.face_count, gl.UNSIGNED_SHORT, p.face_offset << 1)*//*ï¿½ï¿½Ñ¡ï¿½Ð¹ï¿½ï¿½ÒµÄ¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½*/
 					}
 					gl.disable(gl.CULL_FACE)
-				}/*»­¹ú¼Ò¼ä±ß½ç*/
+				}/*ï¿½ï¿½ï¿½ï¿½ï¿½Ò¼ï¿½ß½ï¿½*/
 				if (a) {/*
 					gl.enable(gl.DEPTH_TEST),
 					gl.depthMask(!1);
@@ -6353,7 +6353,7 @@ function() {
 					gl.drawElements(gl.LINES, this.line_count, gl.UNSIGNED_SHORT, 0),
 					gl.depthMask(!0)*/
 				}
-				/*»­Ñ¡ÖÐ¹ú¼ÒµÄ±ß¿ò*/
+				/*ï¿½ï¿½Ñ¡ï¿½Ð¹ï¿½ï¿½ÒµÄ±ß¿ï¿½*/
 				/*if (u && (e.pick_index !== this.bordered_country_index && this.set_border(e.pick_index), this.border.count)) {
 					var f = this.programs.line.use();
 					f.uniformMatrix4fv('mvp', e.camera.mvp),
@@ -6373,7 +6373,7 @@ function() {
 				gl.disable(gl.CULL_FACE)
 			}
 		},
-        /*Êó±êÊ°È¡£¬ÏñËØÊ°È¡Âß¼­*/
+        /*ï¿½ï¿½ï¿½Ê°È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê°È¡ï¿½ß¼ï¿½*/
 		o.prototype.pick = function() {
 			function e(e, a, i) {
 				var u = e.camera.viewport,
@@ -6549,7 +6549,7 @@ var GTW = GTW || {};
 				e()
 			})
 		},
-		e.prototype.render_labels = function(e) {/*ÏÈ´´½¨2048´óÐ¡µÄÌùÍ¼£¬È»ºó¸ù¾ÝlabelµÄÊý¾Ý£¬Éú³ÉÇòÃælabelÎÄ×ÖÌùÍ¼atlas*/
+		e.prototype.render_labels = function(e) {/*ï¿½È´ï¿½ï¿½ï¿½2048ï¿½ï¿½Ð¡ï¿½ï¿½ï¿½ï¿½Í¼ï¿½ï¿½È»ï¿½ï¿½ï¿½ï¿½ï¿½labelï¿½ï¿½ï¿½ï¿½ï¿½Ý£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½labelï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¼atlas*/
 			var r = document.createElement('canvas');
 			r.width = r.height = t;
 			var n = r.getContext('2d');
@@ -6576,7 +6576,7 @@ var GTW = GTW || {};
 			gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, gl.LUMINANCE, gl.UNSIGNED_BYTE, r),
 			gl.generateMipmap(gl.TEXTURE_2D)
 		},
-		e.prototype.project_labels = function(e) {/*´´½¨ÇòÃælabelµÄÍø¸ñ*/
+		e.prototype.project_labels = function(e) {/*ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½labelï¿½ï¿½ï¿½ï¿½ï¿½ï¿½*/
 			function t(t, r, i, u) {
 				mat4.identity(t);
 				if ('ecef' == e)
@@ -6663,9 +6663,9 @@ var GTW = GTW || {};
 				a.vertexAttribPointer('position', 3, gl.FLOAT, !1, 20, 0),
 				a.vertexAttribPointer('texcoord', 2, gl.FLOAT, !1, 20, 12),
 				a.uniform1i('inside', 0),
-				gl.drawArrays(gl.TRIANGLES, 0, 6 * this.country_count),/*»­Ô¶¾àÀëÊ±µÄ¹ú¼ÒÃû×Ö*/
+				gl.drawArrays(gl.TRIANGLES, 0, 6 * this.country_count),/*ï¿½ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½Ê±ï¿½Ä¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½*/
 				a.uniform1i('inside', 1),
-				gl.drawArrays(gl.TRIANGLES, 6 * this.country_count, 6 * this.city_count),/*»­½ü¾àÀëÊ±µÄ¹ú¼ÒÃû×Ö*/
+				gl.drawArrays(gl.TRIANGLES, 6 * this.country_count, 6 * this.city_count),/*ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½Ä¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½*/
 				gl.depthMask(!0),
 				gl.disable(gl.BLEND)
 			}
@@ -6693,7 +6693,7 @@ GTW.init_scape = function(e, t) {
 		W(t, r, n, o),
 		e.project(t, t)
 	}
-/*Ëæ»ú²úÉú´©ËóµØÐÎ*/
+/*ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½*/
 	function a() {
 		I[0] = 100 * Math.random(),
 		I[1] = 100 * Math.random(),
@@ -6733,7 +6733,7 @@ GTW.init_scape = function(e, t) {
 		gl.enable(gl.DEPTH_TEST),
 		gl.enable(gl.POLYGON_OFFSET_FILL),
 		gl.polygonOffset(1, 1),
-		/*gl.drawElements(gl.TRIANGLE_STRIP, H, gl.UNSIGNED_SHORT, 0),*//*»­µØ´©ËóÊ±µØÐÎ*/
+		/*gl.drawElements(gl.TRIANGLE_STRIP, H, gl.UNSIGNED_SHORT, 0),*//*ï¿½ï¿½ï¿½Ø´ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½*/
 		gl.disable(gl.POLYGON_OFFSET_FILL),
 		gl.enable(gl.BLEND),
 		gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
@@ -6743,7 +6743,7 @@ GTW.init_scape = function(e, t) {
 		webgl.bindVertexBuffer(Y.verts),
 		t.vertexAttribPointer('position', 4, gl.FLOAT, !1, 0, 0),
 		webgl.bindElementBuffer(Y.lines)
-		/*,gl.drawElements(gl.LINES, $, gl.UNSIGNED_SHORT, 0)*//*»­Ïß¿ò·½Ê½µÄ´©ËóÊ±µØÐÎ£¬ÈÃµØÐÎ¿´ÆðÀ´¸ßÁÁ*/
+		/*,gl.drawElements(gl.LINES, $, gl.UNSIGNED_SHORT, 0)*//*ï¿½ï¿½ï¿½ß¿ï¿½Ê½ï¿½Ä´ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½Î£ï¿½ï¿½Ãµï¿½ï¿½Î¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½*/
 	}
 
 	function u(e) {
@@ -7003,7 +7003,7 @@ GTW.init_demo = function(e, t) {
 			t.uniform3fv('color', n),
 			webgl.bindVertexBuffer(F.ring_verts),
 			t.vertexAttribPointer('position', 4, gl.FLOAT, !1, 0, 0),
-			gl.drawArrays(gl.TRIANGLE_STRIP, 0, D),/*»­¸úËæ¹â·ÉÐÐµÄ»·ÐÎ*/
+			gl.drawArrays(gl.TRIANGLE_STRIP, 0, D),/*ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÐµÄ»ï¿½ï¿½ï¿½*/
 			gl.lineWidth(1),
 			gl.enable(gl.BLEND),
 			gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
@@ -7014,7 +7014,7 @@ GTW.init_demo = function(e, t) {
 			t.uniform1f('time', r),
 			webgl.bindVertexBuffer(F.tube_verts),
 			t.vertexAttribPointer('position', 4, gl.FLOAT, !1, 0, 0),
-			gl.drawArrays(gl.TRIANGLE_STRIP, 0, S),/*¹â»·´©ËóµÄÑÕÉ«*/
+			gl.drawArrays(gl.TRIANGLE_STRIP, 0, S),/*ï¿½â»·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É«*/
 			gl.depthMask(!0),
 			gl.disable(gl.BLEND),
 			gl.disable(gl.DEPTH_TEST);
@@ -7132,12 +7132,12 @@ GTW.init_demo = function(e, t) {
 			draw: a
 		}
 	}
-/*¸üÐÂÉèÖÃµ±Ç°Ä£Ê½*/
+/*ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ãµï¿½Ç°Ä£Ê½*/
 	function o() {
 		var r,
 			n = p.player,
 			o = e.camera;
-		if (e.demo_time < 5) {/*µ¼µ¯·ÉÐÐÄ£Ê½*/
+		if (e.demo_time < 5) {/*ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£Ê½*/
 			g = 0,
 			o.near = 0.01,
 			o.far = 1000,
@@ -7145,7 +7145,7 @@ GTW.init_demo = function(e, t) {
 			var a = e.demo_time / 5;
 			n.follow(r.pos, r.rot, 0.01 + 0.5 * a, a * a),
 			n.roll(0.1 * noise.perlin2(1 * e.demo_time, 0))
-		} else if (e.demo_time < 15) 0 == g && (g = 1, e.flash(f), l.reset(), t.set_mode('scape'), e.draw_world = !1); /*µØÃæ´©ËóÄ£Ê½*/
+		} else if (e.demo_time < 15) 0 == g && (g = 1, e.flash(f), l.reset(), t.set_mode('scape'), e.draw_world = !1); /*ï¿½ï¿½ï¿½æ´©ï¿½ï¿½Ä£Ê½*/
 		else if (e.demo_time < 20) {
 			1 == g && (g = 2, e.flash(f), t.set_mode('world'), e.draw_world = !0),
 			o.near = 0.01,
@@ -7481,7 +7481,7 @@ GTW.init_marker = function(e) {
 		r.uniform1f('fuzz', 0),
 		webgl.bindVertexBuffer(o.verts),
 		r.vertexAttribPointer('coord', 2, gl.FLOAT, !1, 0, 0)
-		,gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4)/*»­µ±Ç°·ÃÎÊÕßÎ»ÖÃ*/
+		,gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4)/*ï¿½ï¿½ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½*/
 	}
 	var n = [
 		0,
@@ -7522,7 +7522,7 @@ GTW.init_marker = function(e) {
 		}
 	}
 };
-/*»­´©ËóÊ±ÆÁÄ»ÑÕÉ«±ä»¯*/
+/*ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½Ä»ï¿½ï¿½É«ï¿½ä»¯*/
 var GTW = window.GTW || {};
 GTW.init_flash = function(e) {
 	function t(e) {
@@ -7640,7 +7640,7 @@ MAP.init = function(e) {
 			vec3.copy(z.orbit.dir, t),
 			z.camera.update(z.orbit.pos, z.orbit.dir)
 		} else if ('geocam' == z.camera_mode) {
-			var r = z.projection.dir > 0,/*-1 mercator Æ½Ãæ  1 ecef ÇòÃæ*/
+			var r = z.projection.dir > 0,/*-1 mercator Æ½ï¿½ï¿½  1 ecef ï¿½ï¿½ï¿½ï¿½*/
 				n = z.geocam.coord,
 				o = z.geocam.coord_target,
 				a = z.geocam.coord_delta;
@@ -7958,7 +7958,7 @@ MAP.init = function(e) {
 		t()
 	}
 
-	function T() {/*¸üÐÂÊ±¼ä*//*Ö¡¿ªÊ¼*/
+	function T() {/*ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½*//*Ö¡ï¿½ï¿½Ê¼*/
 		z.time = 1 * (timeNow() - te),
 		z.dt = 1 / 60;
 		var e = Ie(),
@@ -8427,7 +8427,7 @@ MAP.init = function(e) {
 	X.oncontextmenu = function() {
 		return !1
 	};
-	var Oe = {/*Êó±êÊÂ¼þ*/
+	var Oe = {/*ï¿½ï¿½ï¿½ï¿½Â¼ï¿½*/
 		mousedown: function(e) {
 			return y(),
 			Ne = Be = getMouseEventOffset(e),
@@ -8500,7 +8500,7 @@ MAP.init = function(e) {
 	}),
 	MAP.lang = 'en';
 	var qe = 0.025;
-	_.assign(MAP, {/*UI¿ØÖÆ½Ó¿Ú*/
+	_.assign(MAP, {/*UIï¿½ï¿½ï¿½Æ½Ó¿ï¿½*/
 		zoom_in: function() {
 			z.geocam.coord_delta[2] -= qe
 		},
