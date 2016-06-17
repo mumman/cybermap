@@ -52,10 +52,6 @@ void main() {
     gl_FragColor.a = 1.0;
 }
 
-
-
-
-
 // icon //
 attribute vec3 vertex;
 varying float v_alpha;
