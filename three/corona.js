@@ -5,9 +5,10 @@ define(['shaders'], function(shaders){
 
     var corona;
     var geometry=new THREE.BufferGeometry();
-    var thetaSegments=128;
 
-    // these are used to calculate buffer length
+
+
+    var thetaSegments=128;
     var vertexCount = ( thetaSegments + 1 ) * ( 1 + 1 );
 
     // buffers
@@ -15,70 +16,69 @@ define(['shaders'], function(shaders){
     var verticesW = new THREE.BufferAttribute( new Float32Array( vertexCount * 4 ), 4 );
 
 
-    var normals = new THREE.BufferAttribute( new Float32Array( vertexCount * 3 ), 3 );
-    var uvs = new THREE.BufferAttribute( new Float32Array( vertexCount * 2 ), 2 );
+
 
     // some helper variables
-    var index = 0;
+    var index = 0, segment;
     var vertex = new THREE.Vector3();
-    var uv = new THREE.Vector2();
-    var zp=[];
-        for ( var r = 128, n = 0; n < r + 1; n++ ) {
-            var o=Math.PI*2*n/r;
-            // vertex
-            vertex.x =  Math.cos( o );
-            vertex.y =  Math.sin( o );
-            vertex.z =n/(r+1);
-            vertices.setXYZ( index, vertex.x, vertex.y, vertex.z );
-            vertices.setXYZ( index+1, vertex.x, vertex.y, vertex.z );
 
-            verticesW.setXYZW( index, vertex.x, vertex.y, vertex.z,0 );
-            verticesW.setXYZW( index+1, vertex.x, vertex.y, vertex.z,1 );
+    for ( i = 0; i <= 128+1; i ++ ) {
+        segment = Math.PI*2*i/128;
 
-           /* zp.push(vertex.x, vertex.y, vertex.z,0,vertex.x, vertex.y, vertex.z,1);*/
+        // vertex
+        vertex.x =  Math.cos( segment );
+        vertex.y =  Math.sin( segment );
+        vertex.z = i/ (128 + 1);
 
-           /* // uv
-            uv.x = ( vertex.x / 1 ) / 2;
-            uv.y = ( vertex.y / 1 ) / 2;
-            uvs.setXY( index, uv.x, uv.y );
-            uvs.setXY( index, uv.x, uv.y );*/
+        var index1=index++;
+        vertices.setXYZ( index, vertex.x, vertex.y, vertex.z );
+        vertices.setXYZ( index1, vertex.x, vertex.y, vertex.z );
 
-            // increase index
-            index++;
-        }
-   /* var verticesW1 = new THREE.BufferAttribute( new Float32Array( zp ), 4 );
-*/
+        verticesW.setXYZW( index, vertex.x, vertex.y, vertex.z,0 );
+        verticesW.setXYZW( index1, vertex.x, vertex.y, vertex.z,1 );
+        // increase index
+        index++;
+
+    }
+
+
     // generate indices
 
 
-        var indices=[];
-        for ( var i = 0; i < 128; i ++ ) {
-         /*  var a= i * 2;
-           var b= i * 2 + 1;
-           var c= i * 2 + 3;
-           var d= i * 2 + 2;*/
+    var indices=[];
+    for ( var i = 0; i < 128; i ++ ) {
 
-            var a = i;
-            var b = i + 128 + 1;
-            var c = i + 128 + 2;
-            var d = i + 1;
-
-            indices.push(a,b,c);
-            indices.push(a,c,d);
+       /*  var a= i * 2;
+         var b= i * 2 + 1;
+         var c= i * 2 + 3;
+         var d= i * 2 + 2;*/
 
 
 
-        }
+        var a = i;
+        var b = i + 128 + 1;
+        var c = i + 128 + 2;
+        var d = i + 1;
+
+        indices.push(a,b,c);
+        //indices.push(a,c,d);
+
+
+    }
+
 
     // build geometry
+    //geometry.setIndex(new ( verticesW.count>65535 ? THREE.Uint32Attribute : THREE.Uint16Attribute )(indices, 1));
+    //geometry.addAttribute( 'position', verticesW.xyz );
+    //geometry.addAttribute( 'positionW', verticesW );
+
     geometry.setIndex(new ( vertices.count>65535 ? THREE.Uint32Attribute : THREE.Uint16Attribute )(indices, 1));
     geometry.addAttribute( 'position', vertices );
     geometry.addAttribute( 'positionW', verticesW );
-   /* geometry.addAttribute( 'positionW1', verticesW1 );*/
-   /* geometry.addAttribute( 'uv', uvs );*/
 
 
-/*    var material=new THREE.MeshBasicMaterial({ color: 0xffffff,wireframe:true});*/
+
+ /* var material=new THREE.MeshBasicMaterial({ color: 0xffffff,wireframe:true});*/
 
     //材质
     var t_smoke=new THREE.TextureLoader().load('textures/smoke.jpg');
@@ -97,49 +97,10 @@ define(['shaders'], function(shaders){
             wireframe:true
 
         });
-
     var corona=new THREE.Mesh(geometry, material);
 
 
-
 /*
-
-    function createMesh(geom) {
-
-        var t_smoke=new THREE.TextureLoader().load('textures/smoke.jpg');
-        t_smoke.wrapS=THREE.RepeatWrapping;
-        t_smoke.wrapT=THREE.ClampToEdgeWrapping;
-
-        var customUniforms=shaders.shader['corona'].uniforms;
-        customUniforms.t_smoke.value=t_smoke;
-
-        var material=new THREE.ShaderMaterial(
-            {
-                uniforms: customUniforms,
-                vertexShader: shaders.shader['corona'].vertexShader,
-                fragmentShader: shaders.shader['corona'].fragmentShader,
-                side: THREE.DoubleSide
-
-            });
-
-        var wireFrameMat = new THREE.MeshBasicMaterial();
-        wireFrameMat.wireframe = true;
-
-        // create a multimaterial
-        var mesh = THREE.SceneUtils.createMultiMaterialObject(geom, [material, wireFrameMat]);
-
-        return mesh;
-    }
-
-
-    corona= createMesh(geometry);
-*/
-
-
-
-
-/*
-
     var corona;
     var geometry=new THREE.BufferGeometry();
 
@@ -281,19 +242,14 @@ define(['shaders'], function(shaders){
 
 
 
-    var corona=new THREE.Mesh(geometry, material);
-
-
-*/
+    var corona=new THREE.Mesh(geometry, material);*/
 
 
 
-
-
-    console.log('corona.js');
+   console.log('corona.js');
    return {
        corona:corona,
        customUniforms: customUniforms
-
    }
+
 });

@@ -226,27 +226,10 @@ define(function(){
                 t_smoke:{type:'t',value:null},
                 time:{type:'f',value:0.934},
                 zoff:{type:'f',value:0.0},
-
-
-
                 _SrcBlend:{type:'f',value:0.0},
                 _DstBlend:{type:'f',value:0.0}
-
-
-        },
-        vertexShader:[
-           /*     'uniform float zoff;',
-                 'varying vec2 v_texcoord;',
-            'attribute vec3 position;
-                 'void main()',
-                 '{',
-                 'float s = 10.0 + (10.0 * position.w);',
-                 'vec3 P = vec3(s * position.xy, zoff);',
-                 'v_texcoord = position.zw;',
-                 /!*'P = bill * P;',*!/
-                 'gl_Position = projectionMatrix * modelViewMatrix * vec4(P, 1.0);',
-                 '}'
-*/
+            },
+            vertexShader:[
                 'uniform float zoff;',
                 'attribute vec4 positionW;',
                 'varying vec2 v_texcoord;',
@@ -256,11 +239,7 @@ define(function(){
                 'vec3 p = vec3(s * positionW.xy, zoff);',
                 'v_texcoord = positionW.zw;',
                 'gl_Position = projectionMatrix * modelViewMatrix * vec4( p, 1.0 );',
-
-               /* 'v_texcoord = positionW.zw;',
-                'gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );',*/
                 '}'
-
             ].join('\n'),
             fragmentShader:[
                 'varying vec2 v_texcoord;',
@@ -278,64 +257,21 @@ define(function(){
                 'gl_FragColor.rgb = mix(color0, color1, t) + 0.3*smoke;',
                 'gl_FragColor.a = 1.0;',
                 '}'
-
-
-               /*  'uniform vec3 color0;',
-                 'void main()',
-                 '{',
-                 'gl_FragColor.rgb= color0;',
-                 '}'*/
-
             ].join('\n')
+
+
+
+
+
+
+
+
+
+
+
+
+
         }
-
-
-/*        // corona //
-        attribute vec4 vertex;
-    varying vec2 v_texcoord;
-    uniform mat4 mvp;
-
-    uniform mat3 bill;
-
-
-
-    uniform vec4 color;
-    uniform sampler2D t_smoke;
-    uniform float time;
-
-    uniform vec3 color0;
-    uniform vec3 color1;
-    uniform float zoff;
-
-    // corona.vertex //
-    void main() {
-        float s = 10.0 + (10.0 * vertex.w);
-        vec3 P = vec3(s * vertex.xy, zoff);
-        P = bill * P;
-        gl_Position = mvp * vec4(P, 1.0);
-        v_texcoord = vertex.zw;
-    }
-
-    // corona.fragment //
-    void main() {
-        vec2 uv = vec2(5.0*v_texcoord.x + 0.01*time, 0.8 - 1.5*v_texcoord.y);
-        float smoke = texture2D(t_smoke, uv).r;
-        uv = vec2(3.0*v_texcoord.x - 0.007*time, 0.9 - 0.5*v_texcoord.y);
-        smoke *= 1.5*texture2D(t_smoke, uv).r;
-
-        float t = pow(v_texcoord.y, 0.25);
-        gl_FragColor.rgb = mix(color0, color1, t) + 0.3*smoke;
-        gl_FragColor.a = 1.0;
-    }
-
-        */
-
-    /*    _SrcBlend ("SrcBlend", Int) = 5 // SrcAlpha
-    _DstBlend ("DstBlend", Int) = 10 // OneMinusSrcAlpha
-    _Fade ("Fade", Float) = 1.0*/
-
-
-
     };
 
     console.log('shaders.js');

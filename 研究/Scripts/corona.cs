@@ -19,8 +19,8 @@ public class Corona
             corona_vertex.Add(new Vector3(i, u, a));
             corona_vertex.Add(new Vector3(i, u, a));
             corona_vertex_offset.Add(new Vector2(0f, 0f));
-            corona_vertex_offset.Add(new Vector2(1f, 0f));// 			e.push(i, u, a, 0, i, u, a, 1)
-            
+            corona_vertex_offset.Add(new Vector2(1f, 0f));// 			e.push(i, u, a, 0, i, u, a, 1)  
+			
         }                                           // 		}
 
         for (int n = 0; n < 128; ++n)

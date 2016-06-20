@@ -191,7 +191,7 @@ require(['earth', 'stars', 'corona','gui'], function(earth, stars,corona, gui){
 
 
         //固定光晕
-        corona.corona.lookAt(camera.position);
+       // corona.corona.lookAt(camera.position);
 
         renderer.render(scene, camera);
 
