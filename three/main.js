@@ -159,10 +159,11 @@ require(['earth', 'stars', 'corona','gui'], function(earth, stars,corona, gui){
     }
 
     function render(){
-        var time=performance.now()*0.001;
         camera.lookAt(scene.position);
+        var time=performance.now()*0.001;
         var t=clock.getElapsedTime();
-
+        //光晕云图动画
+        corona.customUniforms.time.value=t;
 
         //切换平面
         if(gui.controls.switchPlane){
@@ -191,7 +192,7 @@ require(['earth', 'stars', 'corona','gui'], function(earth, stars,corona, gui){
 
 
         //固定光晕
-       // corona.corona.lookAt(camera.position);
+        corona.corona.lookAt(camera.position);
 
         renderer.render(scene, camera);
 
