@@ -74,104 +74,6 @@ define(function(){
                 '}'
             ].join('\n')
         },
-        'country':{
-           /* attributes:{
-                position2: {type: "v3", value: new THREE.Vector3( 0, 0, 0 )},
-                normal2: {type: "v3", value: new THREE.Vector3( 0, 0, 0 )},
-
-            },*/
-            uniforms:{
-                offset_x: {type: "f", value: 0.0},
-                t_blur: {type: "t", value: null},
-                blend: {type: "f", value: 0.0},
-                light_pos: {type: "v3", value: new THREE.Vector3( 0, 0, 0 )},
-                view_pos: {type: "v3", value: new THREE.Vector3( 0, 0, 0 )},
-                color0: {type: "v3", value: new THREE.Vector3( 0.07, 0.09, 0.07 )},
-                color1: {type: "v3", value: new THREE.Vector3( 0.07, 0.09, 0.07 )},
-                tone: {type: "f", value: 0.0},
-                c: {type: "f", value: 0.0},
-                height: {type: "f", value: 0.0},
-
-
-               /* attribute vec3 position;
-                attribute vec3 normal;
-                attribute vec3 position2;
-                attribute vec3 normal2;
-                attribute vec2 texcoord;
-                varying vec3 v_normal;
-                varying vec2 v_texcoord;
-                varying vec3 v_light_vec;
-                varying vec3 v_view_vec;
-                uniform mat4 mvp;
-
-*/
-            },
-            vertexShader:[
-                'uniform float blend;',
-                'uniform float offset_x;',
-                'varying vec2 v_texcoord;',
-                'varying vec3 v_normal',
-                'varying vec3 v_light_vec',
-                'varying vec3 v_view_vec',
-
-
-                'void main()',
-                '{',
-
-                'vec3 P = mix(position, normal, blend);',
-                'P.x += offset_x;',
-                'gl_Position = projectionMatrix * modelViewMatrix * vec4( P, 1.0 );',
-
-
-
-                '}'
-
-            /*    vec3 P = mix(position, position2, blend);
-                P.x += offset_x;
-
-                v_normal = mix(normal, normal2, blend);
-                P += height * v_normal;
-
-                gl_Position = mvp * vec4(P, 1.0);
-
-                v_texcoord = texcoord;
-                v_light_vec = light_pos - P;
-                v_view_vec = view_pos - P;*/
-
-
-            ].join('\n'),
-            fragmentShader:[
-                'uniform sampler2D t_blur;',
-                'uniform sampler2D t_pattern;',
-                'uniform vec3 color0;',
-                'uniform vec3 color1;',
-                'uniform vec2 pattern_scale;',
-                'varying vec2 v_texcoord;',
-                'varying vec3 v_normal',
-                'varying vec3 v_light_vec',
-                'varying vec3 v_view_vec',
-                'void main()',
-                '{',
-                'float pattern = texture2D(t_pattern, pattern_scale * v_texcoord).r;',
-                'float blur = texture2D(t_blur, v_texcoord).r;',
-                'gl_FragColor.rgb = mix(color0, color1, blur) + vec3(pattern);',
-                'gl_FragColor.a = 1.0;',
-
-                '}'
-            ].join('\n')
-        },
-
-
-
-
-
-
-
-
-
-
-
-
 
 
         'stars':{
@@ -195,28 +97,6 @@ define(function(){
                 '}'
             ].join('\n')
         },
-
-
-
-
-    /*    'corona1':{
-            uniforms:{
-                color0:{type:'v4',value:new THREE.Vector3(1,1,1,1)}
-            },
-            vertexShader:[
-                'void main()',
-                '{',
-                'gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );',
-                '}'
-            ].join('\n'),
-            fragmentShader:[
-                'uniform vec4 color0;',
-                'void main()',
-                '{',
-                'gl_FragColor = color0;',
-                '}'
-            ].join('\n')
-        },*/
 
 
         'corona':{
@@ -257,19 +137,96 @@ define(function(){
                 '}'
             ].join('\n')
 
+        },
+
+
+        'country':{
+            /* attributes:{
+             position2: {type: "v3", value: new THREE.Vector3( 0, 0, 0 )},
+             normal2: {type: "v3", value: new THREE.Vector3( 0, 0, 0 )},
+
+             },*/
+            uniforms:{
+                offset_x: {type: "f", value: 0.0},
+                t_blur: {type: "t", value: null},
+                blend: {type: "f", value: 0.0},
+                light_pos: {type: "v3", value: new THREE.Vector3( 0, 0, 0 )},
+                view_pos: {type: "v3", value: new THREE.Vector3( 0, 0, 0 )},
+                color0: {type: "v3", value: new THREE.Vector3( 0.07, 0.09, 0.07 )},
+                color1: {type: "v3", value: new THREE.Vector3( 0.07, 0.09, 0.07 )},
+                tone: {type: "f", value: 0.0},
+                c: {type: "f", value: 0.0},
+                height: {type: "f", value: 0.0},
+
+
+                /* attribute vec3 position;
+                 attribute vec3 normal;
+                 attribute vec3 position2;
+                 attribute vec3 normal2;
+                 attribute vec2 texcoord;
+                 varying vec3 v_normal;
+                 varying vec2 v_texcoord;
+                 varying vec3 v_light_vec;
+                 varying vec3 v_view_vec;
+                 uniform mat4 mvp;
+
+                 */
+            },
+            vertexShader:[
+                'uniform float blend;',
+                'uniform float offset_x;',
+                'varying vec2 v_texcoord;',
+                'varying vec3 v_normal',
+                'varying vec3 v_light_vec',
+                'varying vec3 v_view_vec',
+
+
+                'void main()',
+                '{',
+
+                'vec3 P = mix(position, normal, blend);',
+                'P.x += offset_x;',
+                'gl_Position = projectionMatrix * modelViewMatrix * vec4( P, 1.0 );',
 
 
 
+                '}'
+
+                /*    vec3 P = mix(position, position2, blend);
+                 P.x += offset_x;
+
+                 v_normal = mix(normal, normal2, blend);
+                 P += height * v_normal;
+
+                 gl_Position = mvp * vec4(P, 1.0);
+
+                 v_texcoord = texcoord;
+                 v_light_vec = light_pos - P;
+                 v_view_vec = view_pos - P;*/
 
 
+            ].join('\n'),
+            fragmentShader:[
+                'uniform sampler2D t_blur;',
+                'uniform sampler2D t_pattern;',
+                'uniform vec3 color0;',
+                'uniform vec3 color1;',
+                'uniform vec2 pattern_scale;',
+                'varying vec2 v_texcoord;',
+                'varying vec3 v_normal',
+                'varying vec3 v_light_vec',
+                'varying vec3 v_view_vec',
+                'void main()',
+                '{',
+                'float pattern = texture2D(t_pattern, pattern_scale * v_texcoord).r;',
+                'float blur = texture2D(t_blur, v_texcoord).r;',
+                'gl_FragColor.rgb = mix(color0, color1, blur) + vec3(pattern);',
+                'gl_FragColor.a = 1.0;',
 
-
-
-
-
-
-
+                '}'
+            ].join('\n')
         }
+
     };
 
     console.log('shaders.js');

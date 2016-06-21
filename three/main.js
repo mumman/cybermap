@@ -35,11 +35,36 @@ require(['earth', 'stars', 'corona','gui'], function(earth, stars,corona, gui){
         scene.add(stars.stars);
         scene.add(corona.corona);
 
+/*
+        //加载国家模型数据
+        // instantiate a loader
+        var loader = new THREE.OBJLoader();
 
-      /*  var geometry = new THREE.BoxGeometry( 10, 10, 10 );
-        var material = new THREE.MeshBasicMaterial( {color: 0xffffff} );
-        var cube = new THREE.Mesh( geometry, material );
-        scene.add( cube );*/
+        // load a resource
+        loader.load(
+            // resource URL
+            'data/map.json',
+            // Function when resource is loaded
+            function ( object ) {
+                scene.add( object );
+            }
+        );
+
+        var objectLoader = new THREE.ObjectLoader();
+        objectLoader.load('data/map.json', function ( obj ) {
+            scene.add( obj );
+        } );*/
+
+
+
+
+
+
+
+        /*  var geometry = new THREE.BoxGeometry( 10, 10, 10 );
+          var material = new THREE.MeshBasicMaterial( {color: 0xffffff} );
+          var cube = new THREE.Mesh( geometry, material );
+          scene.add( cube );*/
 
         /*//灯
          scene.add(new THREE.AmbientLight(0xffffff));*/
