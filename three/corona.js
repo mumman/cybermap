@@ -74,7 +74,7 @@ define(['shaders'], function(shaders){
             blendSrc: THREE.OneFactor,
             blendDst: THREE.OneFactor
         });
-    var corona=new THREE.Mesh(geometry, material);
+    corona=new THREE.Mesh(geometry, material);
 
     console.log('corona.js');
     return {

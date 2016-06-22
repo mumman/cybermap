@@ -1,4 +1,4 @@
-require(['earth', 'stars', 'corona','gui'], function(earth, stars,corona, gui){
+require(['earth', 'stars', 'corona','labels','gui'], function(earth, stars,corona, labels,gui){
     // some code here
     //基本
     var camera, scene, renderer, main;
@@ -34,26 +34,8 @@ require(['earth', 'stars', 'corona','gui'], function(earth, stars,corona, gui){
         scene.add(earth.earth);
         scene.add(stars.stars);
         scene.add(corona.corona);
+        //scene.add(labels.labels);
 
-/*
-        //加载国家模型数据
-        // instantiate a loader
-        var loader = new THREE.OBJLoader();
-
-        // load a resource
-        loader.load(
-            // resource URL
-            'data/map.json',
-            // Function when resource is loaded
-            function ( object ) {
-                scene.add( object );
-            }
-        );
-
-        var objectLoader = new THREE.ObjectLoader();
-        objectLoader.load('data/map.json', function ( obj ) {
-            scene.add( obj );
-        } );*/
 
 
 

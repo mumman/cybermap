@@ -6487,24 +6487,26 @@ var GTW = GTW || {};
 				format: gl.LUMINANCE
 			}),
 			gl.generateMipmap(gl.TEXTURE_2D),
-			this.country_count = 0,
-			this.labels = [],
-			this.geoip_iso2 = null;
+			
+			
+			this.country_count = 0,//城市为要在后面添加
+			this.labels = [],   //labels数组
+			this.geoip_iso2 = null;   //这个不需要,用户位置
 			var e = this;
-			this.load_label_data(function() {
+			this.load_label_data(function() {//运行了这个载入label数据函数
 				e.render_labels('en'),
 				e.project_labels('ecef')
 			})
 		}
 		var t = 2048;
-		e.prototype.load_label_data = function(e) {
-			var t = this;
+		e.prototype.load_label_data = function(e) { //这个e是callback参数
+			var t = this;//获得e对象
 			$.getJSON(GTW.resource_url('data/labels.json'), function(r) {
-				function n() {
-					var e = window.lang;
+				function n() {  //这个方法没有,语言切换
+					var e = window.lang;  //语言切换的对象啊
 					_.each(r.countries, function(t) {
 						var r = 'MAP_COUNTRY_' + t.iso3.toUpperCase();
-						t.name = e.getText(r)
+						t.name = e.getText(r)   //为什么要为e对象添加name ,并这样计算?
 					}),
 					_.each(r.cities, function(t) {
 						var r = 'MAP_CITY_' + t.code.toUpperCase();
@@ -6512,48 +6514,48 @@ var GTW = GTW || {};
 					})
 				}
 
-				function o() {
-					this.coord = vec3.create(),
-					this.coord[2] = 0.0001,
-					this.pos = vec3.create(),
+				function o() {  //这个对象 文字信息保存变量 
+					this.coord = vec3.create(), //建议使用 new THREE.Vector3();
+					this.coord[2] = 0.0001, //z坐标
+					this.pos = , //第二个摩卡多坐标?
 					this.mat = mat4.create(),
-					this.box = vec4.create(),
+					this.box = vec4.create(), //这个盒子干嘛?
 					this.name = '',
 					this.font_size = 0
 				}
 
-				function a(e, r, n) {
+				function a(e, r, n) { //这个方法给变量赋值,
 					_.each(e, function(e) {
-						if (r) {
+						if (r) { //干嘛要这么做啊?
 							if (n && e.font_size < 5) return;
 							if (!n && e.font_size > 5) return
 						}
-						var a = new o;
-						vec2.copy(a.coord, e.coord),
-						a.coord[2] *= 2,
+						var a = new o; //上面保存变量对象
+						vec2.copy(a.coord, e.coord), //把e的坐标保存到a中
+						a.coord[2] *= 2,//z还要乘以2,毛病啊
 						a.name = e.name,
 						a.font_size = e.font_size,
-						r ? a.name = a.name.toUpperCase() : a.font_size = 3,
-						e.iso2 && (a.iso2 = e.iso2),
-						t.labels.push(a)
+						r ? a.name = a.name.toUpperCase() : a.font_size = 3,//r意义什么啊?
+						e.iso2 && (a.iso2 = e.iso2),//也不知道这个数据有什么用
+						t.labels.push(a) //labels数组保存a对象.
 					})
 				}
-				n(),
+				n(),//这个没用
 				a(r.countries, !0, !0),
-				t.country_count = t.labels.length,
+				t.country_count = t.labels.length,//国家数量
 				a(r.cities, !1, !1),
 				a(r.countries, !0, !1),
-				t.city_count = t.labels.length - t.country_count;
-				var i = 30 * t.labels.length;
+				t.city_count = t.labels.length - t.country_count;//城市的数量
+				var i = 30 * t.labels.length;//buffer乘以30?乘以3才对吧
 				t.buffers.vert = webgl.makeVertexBuffer(new Float32Array(i)),
-				e()
+				e()//运行回调函数
 			})
 		},
 		e.prototype.render_labels = function(e) {/*先创建2048大小的贴图，然后根据label的数据，生成球面label文字贴图atlas*/
-			var r = document.createElement('canvas');
-			r.width = r.height = t;
+			var r = document.createElement('canvas');//e只英文.language
+			r.width = r.height = t;//2048
 			var n = r.getContext('2d');
-			n.fillStyle = '#000',
+			n.fillStyle = '#000',//背景应该黑色且透明才对啊..?
 			n.fillRect(0, 0, r.width, r.height),
 			n.font = '30px Ubuntu Mono',
 			n.fillStyle = 'white',
@@ -6561,24 +6563,24 @@ var GTW = GTW || {};
 			var o = [
 				0,
 				0
-			],
+			],//为不是coord啊?
 				a = 35;
-			_.each(this.labels, function(e) {
+			_.each(this.labels, function(e) {//遍历labels
 				var i = e.name,
-					u = n.measureText(i).width;
-				o[0] + u >= r.width && (o[0] = 0, o[1] += a),
-				n.fillText(i, o[0], o[1] - 0),
-				vec4.set(e.box, o[0], o[1], o[0] + u, o[1] + a),
-				vec4.scale(e.box, e.box, 1 / t),
-				o[0] += u
+					u = n.measureText(i).width;//获得文字的宽度
+				o[0] + u >= r.width && (o[0] = 0, o[1] += a),//当超出2018边界是变化坐标x=0,y+=35
+				n.fillText(i, o[0], o[1] - 0),//写入label与坐标
+				vec4.set(e.box, o[0], o[1], o[0] + u, o[1] + a),//干嘛用这个box?//这里使用的坐标修改?
+				vec4.scale(e.box, e.box, 1 / t),//为了放大?
+				o[0] += u //这不是按顺写label,?坐标用在那里了?
 			}),
-			gl.bindTexture(gl.TEXTURE_2D, this.texture),
+			gl.bindTexture(gl.TEXTURE_2D, this.texture),//纹理是直接传到着色器中的.
 			gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, gl.LUMINANCE, gl.UNSIGNED_BYTE, r),
 			gl.generateMipmap(gl.TEXTURE_2D)
 		},
 		e.prototype.project_labels = function(e) {/*创建球面label的网格*/
-			function t(t, r, i, u) {
-				mat4.identity(t);
+			function t(t, r, i, u) { //干嘛?看不懂
+				mat4.identity(t); //矩阵恒等?
 				if ('ecef' == e)
 				{
 					vec3.normalize(n, r);
@@ -6607,57 +6609,55 @@ var GTW = GTW || {};
 					n = vec3.create(),
 					o = vec3.create(),
 					a = vec3.create(),
-					i = [],
+					i = [],//buffer数组
 					u = vec3.create(),
 					c = [-1, -1, -1,
-						1,
-						1,
-						1, -1, -1,
-						1,
-						1,
-						1, -1
-					],
+					      1,  1,  1,
+						 -1, -1,  1,
+						  1,  1, -1
+					    ],
 					l = this;
 					var wtwtwt = mat4.create();
 					wtwtwt = mat4.identity(wtwtwt);
 					mat4.rotateX(wtwtwt, wtwtwt, HALF_PI);
-				_.each(this.labels, function(e) {
-					e.iso2 == l.geoip_iso2 ? e.coord[2] = 0.015 : e.coord[2] = 0.001,
-					r(e.pos, e.coord);
+				_.each(this.labels, function(e) {  //这里才是修改了之前的坐标?
+					e.iso2 == l.geoip_iso2 ? e.coord[2] = 0.015 : e.coord[2] = 0.001,//用户位置,不要坐标点
+					r(e.pos, e.coord);//下面定义了以三维向量
 					var n = 1 * e.font_size;
-					t(e.mat, e.pos, n * (e.box[2] - e.box[0]), n * (e.box[3] - e.box[1]));
+					t(e.mat, e.pos, n * (e.box[2] - e.box[0]), n * (e.box[3] - e.box[1]));//上面的t函数//转化成魔卡托坐标?
+					
 					for (var o = 0; o < c.length; o += 2)
 					{
 						u[0] = c[o + 0];
 						u[1] = c[o + 1];
 						u[2] = 0;
 						vec3.transformMat4(u, u, e.mat);
-						i.push(u[0], u[1], u[2]);
+						i.push(u[0], u[1], u[2]); //position?
 						u[0] = 0.5 * (1 + c[o + 0]);
 						u[1] = 0.5 * (1 + c[o + 1]);
 						u[0] = lerp(e.box[2], e.box[0], u[0]);
 						u[1] = lerp(e.box[3], e.box[1], u[1]);
-						i.push(u[0], u[1]);
+						i.push(u[0], u[1]);//uv?
 					}	
 				}),
 				webgl.bindVertexBuffer(this.buffers.vert),
 				gl.bufferSubData(gl.ARRAY_BUFFER, 0, new Float32Array(i))
 			}
 		};
-		var r = vec3.create();
+		var r = vec3.create();//存放了两套坐标
 		return e.prototype.draw = function(e) {
 			if (0 != this.labels.length) {
 				gl.enable(gl.DEPTH_TEST),
 				gl.enable(gl.BLEND),
 				gl.blendFunc(gl.SRC_ALPHA, gl.ONE),
 				gl.depthMask(!1),
-				e.project(r, e.geocam.coord);
+				e.project(r, e.geocam.coord); //地心坐标与墨卡托投影坐标切换
 				var t = 3,
 					n = 10,
 					o = lerp(t, n, e.projection.blend),
 					a = this.programs.label.use();
 				a.uniformMatrix4fv('mvp', e.camera.mvp),
-				a.uniform4f('circle_of_interest', r[0], r[1], r[2], o),
+				a.uniform4f('circle_of_interest', r[0], r[1], r[2], o),//兴趣圈?
 				a.uniformSampler2D('t_color', this.texture),
 				webgl.bindVertexBuffer(this.buffers.vert),
 				a.vertexAttribPointer('position', 3, gl.FLOAT, !1, 20, 0),
