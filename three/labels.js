@@ -1,9 +1,31 @@
 /**
- * Created by Administrator on 2016/6/21.
+ * Created by Administrator on 2016/6/23.
  */
-define(['shaders'], function(shaders){
-    /*   var labels= new THREE.Object3D();
+define(["shaders"], function(shaders){
+    /*  require.js回调的处理方法
+     var promise = new Promise(function(resolve, reject){
+     sm2.soundManager.setup({
+     url:'js/sm2/swf/',
+     onready: function() {
+     // 返回 sound
+     try {
+     var sound = sm2.soundManager.createSound({
+     url: 'sound/sound1.mp3',
+     autoLoad: true
+     });
+     // success return
+     resolve(sound);
+     } catch (ex) {
+     // error return
+     reject(new Error(ex))
+     }
+     }
+     });
+     */
 
+
+    /*基础文字demo
+     var promise=new Promise(function(resolve,reject){
      var labelPlane =new THREE.PlaneBufferGeometry( 2048, 2048 );
      //var labelBg = new THREE.PlaneBufferGeometry( 10, 5 );
 
@@ -30,261 +52,245 @@ define(['shaders'], function(shaders){
      }
 
 
-     var labels = new THREE.Mesh( labelPlane, generateLabelMaterial('张 American' ) );
-     labels.position.set( 0, 0, 0 );
+
 
 
 
      $.getJSON('data/labels.json', function(data) {
 
-     /!*for(var key in data.cities){
-     console.log("cities:"+key.name);
-
-     }*!/
      //console.log(data.cities)
      $.each(data.cities,function(index,value){
      console.log(value.name.en);
+     var labels = new THREE.Mesh( labelPlane, generateLabelMaterial(value.name.en ) );
+     labels.position.set( 0, 0, 0 );
+     resolve(labels);
 
      });
 
      });
 
-     console.log(labels.js);
-     return {
-     labels:labels,
-     //  customUniform:customUniform
-     };*/
+
+     });
+
+     */
+
+    //投影坐标变换
+    var GTW=GTW || {};
+
+    (function(){
+        var e=1, t=10;
+        var clamp=THREE.Math.clamp;
+        var deg2rad=THREE.Math.degToRad;
+        GTW.project_mercator=function(r, n){
+            var o=n.x,
+                a=n.y,
+                i=Math.PI*a/180,
+                u=90/Math.PI*Math.log(Math.tan(0.25*Math.PI+0.5*i));
+
+            r.x=-o/180*t;
+            r.y=clamp(u/90, -1, 1)*t;
+            r.z=-e*n.z*t;
+        };
+        GTW.project_ecef=function(r, n){
+
+            var o=deg2rad(n.x),
+                a=deg2rad(n.y),
+                i=e*n.z,
+                u=Math.cos(a),
+                c=Math.sin(a),
+                l=1,
+                s=1;
+
+            r.x=-(l+i)*u*Math.cos(o)*t;
+            r.z=(l+i)*u*Math.sin(o)*t;
+            r.y=(s+i)*c*t;
+        };
+        GTW.lerp= function (value1, value2, amount) {
+            amount = amount < 0 ? 0 : amount;
+            amount = amount > 1 ? 1 : amount;
+            return value1 + (value2 - value1) * amount;
+        };
+
+        GTW.clamp = function (value, min, max) {
+
+            if (value < min) {
+                return min;
+            }
+            else if (value > max) {
+                return max;
+            }
+
+            return value;
+        };
+
+    })();
 
 
-/*  --------------------------------------------------------------------------------------------------------
-    // var GTW = GTW || {};
-    var labels=function(){
-        function e(){
-            this.buffers={
-                vert: null
-            },
-                this.programs={
-                    label: webgl.getProgram('label')
-                },
-                this.texture=webgl.createTexture2D({
-                    size: t,
-                    mipmap: !0,
-                    min: gl.LINEAR_MIPMAP_LINEAR,
-                    aniso: 4,
-                    format: gl.LUMINANCE
-                }),
-                gl.generateMipmap(gl.TEXTURE_2D),
-                this.country_count=0,
-                this.labels=[],
-                this.geoip_iso2=null;
-            var e=this;
-            this.load_label_data(function(){
-                e.render_labels('en'),
-                    e.project_labels('ecef')
-            })
-        }
-
+    var promise=new Promise(function(resolve, reject){
         var t=2048;
-        e.prototype.load_label_data=function(e){
-            var t=this;
-            $.getJSON(GTW.resource_url('data/labels.json'), function(r){
-                function n(){
-                    var e=window.lang;
-                    $.each(r.countries, function(t){
-                        var r='MAP_COUNTRY_'+t.iso3.toUpperCase();
-                        t.name=e.getText(r)
-                    }),
-                    $.each(r.cities, function(t){
-                        var r='MAP_CITY_'+t.code.toUpperCase();
-                        t.name=e.getText(r)
-                    })
-                }
 
-                function o(){
-                    this.coord=vec3.create(),
-                    this.coord[2]=0.0001,
-                    this.pos=vec3.create(),
-                    this.mat=mat4.create(),
-                    this.box=vec4.create(),
-                    this.name='',
+        var vectex_count=0;//顶点数量
+        var labelsArray=[];
+        var country_count=0;
+        var city_count=0;
+        var texture=null;
+
+        //获得数据并回调处理
+        var load_label_data=function(callback){
+            $.getJSON('data/labels.json', function(json){
+                function TextInf(){  //这个对象 文字信息保存变量
+                    this.coord=new THREE.Vector3(); //vec3.create()
+                    this.coord.z=0.0001; //z坐标
+                    this.pos=new THREE.Vector3(); //第二个摩卡多坐标?vec3.create()
+                    this.mat=new THREE.Matrix4();//mat4.create()
+                    this.box=new THREE.Vector4(); //这个盒子干嘛?
+                    this.name={};//这里是对象才合理,而不是字符串
                     this.font_size=0
                 }
 
-                function a(e, r, n){
-                    _.each(e, function(e){
-                        if(r){
-                            if(n && e.font_size<5) return;
-                            if(!n && e.font_size>5) return
-                        }
-                        var a=new o;
-                        vec2.copy(a.coord, e.coord),
-                            a.coord[2]*=2,
-                            a.name=e.name,
-                            a.font_size=e.font_size,
-                            r ? a.name=a.name.toUpperCase() : a.font_size=3,
-                        e.iso2 && (a.iso2=e.iso2),
-                            t.labels.push(a)
-                    })
+                function setLabel(jsondata, r, n){
+                    if(r){ //干嘛要这么做啊?
+                        if(n && jsondata.font_size<5) return;
+                        if(!n && jsondata.font_size>5) return;
+                    }
+                    $.each(jsondata, function(index, value){
+                        var a=new TextInf(); //上面保存变量对象
+                        a.coord.copy(value.coord);
+                        a.coord.z*=2;
+                        a.name=value.name;
+                        a.font_size=value.font_size;
+                        r ? a.name.en=a.name.en.toUpperCase() : a.font_size=3;
+                        labelsArray.push(a); //labels数组保存a对象.
+                    });
                 }
 
-                n(),
-                    a(r.countries, !0, !0),
-                    t.country_count=t.labels.length,
-                    a(r.cities, !1, !1),
-                    a(r.countries, !0, !1),
-                    t.city_count=t.labels.length-t.country_count;
-                var i=30*t.labels.length;
-                t.buffers.vert=webgl.makeVertexBuffer(new Float32Array(i)),
-                    e()
-            })
-        },
+                setLabel(json.countries, !0, !0);
+                country_count=labelsArray.length;//国家数量
+                setLabel(json.cities, !1, !1);
+                setLabel(json.countries, !0, !1);
+                city_count=labelsArray.length-country_count;//城市的数量
+                vectex_count=30*labelsArray.length;
+                callback();//运行回调函数
+
+            });
+        }
+        //制作纹理
+        var render_labels=function(e){
+            var r=document.createElement('canvas');
+            r.width=r.height=t;//2048
+            var n=r.getContext('2d');
+            n.fillStyle="rgba( 0, 0, 0, 0 )";//背景改成黑色透明,原先是只是黑色
+            n.fillRect(0, 0, r.width, r.height);
+            n.font='30px Ubuntu Mono';
+            n.fillStyle='white';
+            n.textBaseline='top';
+            //n.fillText("zzz", 1000, 980);
+            var o=[0, 500];//为不是coord啊?
+            var a=35;
+
+            $.each(labelsArray, function(index, value){//原来遍历的方法是另一种方法啊?遍历labels
+                var i=value.name[e],
+                    u=n.measureText(i).width;//获得文字的宽度
+                o[0]+u>=r.width && (o[0]=0, o[1]+=a);//当超出2018边界是变化坐标x=0,y+=35
+                n.fillText(i, o[0], o[1]-0);//写入label与坐标,减0做什么?
+
+                value.box.set(o[0], o[1], o[0]+u, o[1]+a);
+                value.box.multiplyScalar(1/t);
+                o[0]+=u; //这不是按顺写label,?坐标用在那里了?
+
+            });
 
 
-    }();
-*/
+            texture=new THREE.Texture(r);
+            texture.needsUpdate=true;
+        }
+
+        //坐标转换投影
+        var project_labels=function(projection){/*创建球面label的网格*/
 
 
-    var labels;
-    var geometry=new THREE.BufferGeometry();
-    var vertexCount=0;
+            function t(t, r, i, u){ //干嘛?看不懂
+                t.identity();//mat4.identity(t); //矩阵恒等?
+                if('ecef'==projection){
+                    n.divideScalar(r);    //vec3.normalize(n, r); 这个就是除以r???
+                    o.set(0, 1, 0);   // vec3.set(o, 0, 1, 0);
+                    o.cross(n);    //vec3.cross(o, n, o);
+                    o.normalize();    //vec3.normalize(o, o);
+                    a.crossVectors(o, n);     //vec3.cross(a, o, n);
+                    t.elements;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-    var t=2048;
-
-    function LabelObject(){
-        this.vertexCount=0;
-        this.country_count=0;
-        this.city_count=0;
-        this.labels=[];
-        var e=this;
-        this.load_label_data(function(){
-            e.render_labels('en');
-            //e.project_labels('ecef')
-        });
-    }
-    LabelObject.prototype.load_label_data=function(callback){
-        var labelObj=this;
-        $.getJSON('data/labels.json', function(json){
-            function TextInf(){  //这个对象 文字信息保存变量
-                this.coord =new THREE.Vector3(); //vec3.create()
-                this.coord.z = 0.0001; //z坐标
-                this.pos = new THREE.Vector3(); //第二个摩卡多坐标?vec3.create()
-                this.mat = new THREE.Matrix4();//mat4.create()
-                this.box = new THREE.Vector4(); //这个盒子干嘛?
-                this.name = '';
-                this.font_size = 0
+                    t.elements[0]=o.x;
+                    t.elements[1]=o.y;
+                    t.elements[2]=o.z;
+                    t.elements[4]=n.x;
+                    t.elements[5]=n.y;
+                    t.elements[6]=n.z;
+                    t.elements[8]=a.x;
+                    t.elements[9]=a.y;
+                    t.elements[10]=a.z;
+                    t.makeRotationX(Math.PI/2);     //mat4.rotateX(t, t, HALF_PI);
+                }
+                t.multiplyScalar([i, u, 1]);    //mat4.scale(t, t, [i,u,1]);
+                t.elements[12]=r[0];
+                t.elements[13]=r[1];
+                t.elements[14]=r[2];
             }
 
-            function setLabel(jsondata,r,n){
-                $.each(jsondata, function(index,value){
-                    if (r) { //干嘛要这么做啊?
-                        if (n && labelObj.font_size < 5) return;
-                        if (!n && labelObj.font_size > 5) return;
-                    }
-                    console.log(value.name.en);
-                    var a = new TextInf(); //上面保存变量对象
-                   // a.coord.copy(data.coord);//vec2.copy(a.coord, data.coord);//把e的坐标保存到a中
-                   // a.coord.y *= 2;//z还要乘以2,毛病啊
-                    a.name = value.name;
-                    a.font_size = value.font_size;
-                  //  r ? a.name = a.name.toUpperCase() : a.font_size = 3;//r意义什么啊?
-                    labelObj.labels.push(a); //labels数组保存a对象.
 
+            if(labelsArray.length){
+                var r='ecef'==projection ? GTW.project_ecef : GTW.project_mercator;
+                var n=new THREE.Vector3();    //n = vec3.create(),
+                var o=new THREE.Vector3();     //o = vec3.create(),
+                var a=new THREE.Vector3();    //a = vec3.create(),
+                var i=[];                 //buffer数组
+                var u=new THREE.Vector3();   //u = vec3.create(),
+                var c=[-1, -1, -1,
+                    1, 1, 1,
+                    -1, -1, 1,
+                    1, 1, -1
+                ];
+                //l = this;
+                var wtwtwt=new THREE.Matrix4();      // var wtwtwt = mat4.create();
+                wtwtwt.identity();                 //wtwtwt = mat4.identity(wtwtwt);
+                wtwtwt.makeRotationX(Math.PI/2);    //mat4.rotateX(wtwtwt, wtwtwt, HALF_PI);
+                $.each(labelsArray, function(index, value){  //这里才是修改了之前的坐标?
+                    // e.iso2 == l.geoip_iso2 ? e.coord[2] = 0.015 : e.coord[2] = 0.001,//用户位置,不要坐标点
+                    r(value.pos, value.coord);//下面定义了以三维向量
+                    var n=1*value.font_size;
+                    t(value.mat, value.pos, n*(value.box.z-value.box.x), n*(value.box.w-value.box.y));//上面的t函数//转化成魔卡托坐标?
+
+                    for(var o=0; o<c.length; o+=2){
+                        u.x=c[o+0];
+                        u.y=c[o+1];
+                        u.z=0;
+                        u.transformDirection(value.mat);         //vec3.transformMat4(u, u, e.mat);
+                        i.push(u.x, u.y, u.z); //position?
+                        u.x=0.5*(1+c[o+0]);
+                        u.y=0.5*(1+c[o+1]);
+
+                        u.x=GTW.lerp(value.box.z, value.box.x, u.x);
+                        u.x=GTW.lerp(value.box.w, value.box.y, u.y);
+                        i.push(u[0], u[1]);//uv?
+                    }
                 });
 
             }
+        };
 
-           // setLabel(json.countries, !0, !0);
-            labelObj.country_count = labelObj.labels.length;//国家数
-            setLabel(json.cities, !1, !1);
-           // setLabel(json.countries, !0, !1);
-            labelObj.city_count = labelObj.labels.length - labelObj.country_count;//城市的数量
-            labelObj.vertexCount = 30 * labelObj.labels.length;//buffer点数
-            callback();//运行回调函数
-        });
-    };
-    LabelObject.prototype.render_labels=function(e){ //e只英文.language
-        var r = document.createElement('canvas');
-        r.width = r.height = t;//2048
-        var n = r.getContext('2d');
-        n.fillStyle = '#000';//背景应该黑色且透明才对啊..?
-        n.fillRect(0, 0, r.width, r.height);
-        n.font = '30px Ubuntu Mono';
-        n.fillStyle = 'white';
-        n.textBaseline = 'top';
-        var o = [0,0],//为不是coord啊?
-            a = 35;
-        $.each(this.labels, function(e) {//遍历labels
-            var i = e.name,
-                u = n.measureText(i).width;//获得文字的宽度
-           // console.log(e.name);
-            o[0] + u >= r.width && (o[0] = 0, o[1] += a);//当超出2018边界是变化坐标x=0,y+=35
-            n.fillText(i, o[0], o[1] - 0);//写入label与坐标
-           //  vec4.set(e.box, o[0], o[1], o[0] + u, o[1] + a);//干嘛用这个box?//这里使用的坐标修改?
-          //  vec4.scale(e.box, e.box, 1 / t);//为了放大?
-            o[0] += u; //这不是按顺写label,?坐标用在那里了?
-        });
+        //渲染labels
+        var draw_labels=function(){
 
-        var texture = new THREE.Texture( r );
-        texture.needsUpdate = true;
-        var material=new THREE.MeshBasicMaterial({map:texture,transparent:true});
-
-        var geometryPlane=new THREE.BufferGeometry(2048,2048);
-        labels=new THREE.Mesh(geometryPlane,material);
-        labels.position.set( 0, 0, 0 );
-        //console.log(labels);
-
-    };
+            //buffer
+            var vertices=new THREE.BufferAttribute(new Float32Array(vertexCount*3),3);
+            var texcoord=new THREE.BufferAttribute(new Float32Array(vertexCount*2),2);
 
 
-   var zp= new LabelObject();
+            geometry.addAttribute('position',vertices);
+            geometry.addAttribute('a_texcoord',texcoord);
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-
-    //buffer
-    var vertices=new THREE.BufferAttribute(new Float32Array(vertexCount*3),3);
-    var texcoord=new THREE.BufferAttribute(new Float32Array(vertexCount*2),2);
-
-
-    geometry.addAttribute('position',vertices);
-    geometry.addAttribute('a_texcoord',texcoord);
-
-
-    var material=new THREE.MeshBasicMaterial({});
-   // var material=new THREE.ShaderMaterial({});
-
-
-    labels=THREE.Mesh(geometry,material);*/
+            var material=new THREE.MeshBasicMaterial({});
+            // var material=new THREE.ShaderMaterial({});
 
 
 
@@ -306,18 +312,35 @@ define(['shaders'], function(shaders){
 
 
 
+            var material=new THREE.MeshBasicMaterial({map: texture, transparent: true});
+            var labelPlane=new THREE.PlaneBufferGeometry(2048, 2048);
+
+            var labels=new THREE.Mesh(labelPlane, material);
+            labels.position.set(0, 0, 0);
+            resolve(labels);
 
 
 
 
+
+
+
+
+        };
+
+        load_label_data(function(){
+            render_labels("en");
+            project_labels("ecef");
+            draw_labels();
+        })
+
+
+    });
+
+    console.log("labels.js");
+    // 返回 promise 对象
     return {
-        labels: labels,
-        //  customUniform:customUniform
-    };
+        labels: promise
 
-
+    }
 });
-
-
-
-

@@ -1,4 +1,4 @@
-require(['earth', 'stars', 'corona','labels','gui'], function(earth, stars,corona, labels,gui){
+require(['earth', 'stars', 'corona','labels','gui'], function(earth, stars, corona, labels, gui){
     // some code here
     //基本
     var camera, scene, renderer, main;
@@ -35,6 +35,11 @@ require(['earth', 'stars', 'corona','labels','gui'], function(earth, stars,coron
         scene.add(stars.stars);
         scene.add(corona.corona);
         //scene.add(labels.labels);
+        labels.labels.then(function(value){
+            scene.add(value);
+        });
+
+
 
 
 
