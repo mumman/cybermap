@@ -63,8 +63,7 @@ define(['shaders'], function(shaders){
     customUniforms.t_smoke.value=t_smoke;
 
 
-    var material=new THREE.ShaderMaterial(
-        {
+    var material=new THREE.ShaderMaterial({
             uniforms: customUniforms,
             vertexShader: shaders.shader['corona'].vertexShader,
             fragmentShader: shaders.shader['corona'].fragmentShader,

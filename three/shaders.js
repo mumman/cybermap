@@ -225,6 +225,41 @@ define(function(){
 
                 '}'
             ].join('\n')
+        },
+
+        'labels':{
+            uniform:{
+                color: {type: "v4", value: new THREE.Vector4(0.0, 0.0, 0.0, 0.0)},
+                circle_of_interest: {type:"v4", value: new THREE.Vector4(0.0, 0.0, 0.0, 0.0)},
+                inside: {type: "b", value: true},
+                t_color: {type: "t", value: null}
+
+            },
+            vertexShader:[
+                'uniform bool inside',
+                'attribute vec2 a_texcoord',
+                'varying vec2 v_texcoord',
+                'varying float v_alpha;',
+                'void main()',
+                '{',
+                'gl_Position = projectionMatrix * modelViewMatrix * vec4( p, 1.0 );',
+                 'v_alpha=pow(1.0-v_alpha, 6.0);',
+                  'if(!inside)',
+                    'v_alpha=pow(1.0-v_alpha,6.0);',
+                  'v_texcoord=texcoord;',
+                '}'
+            ].join('\n'),
+            fragmentShader:[
+                'uniform sampler2D t_color',
+                'varying vec4 v_texcoord',
+                'void mai(){',
+                    'gl_FragColor=texture2D(t_color,v_texcoord);',
+                    'gl_FragColor.a=0.7*v_alpha;',
+
+                '}'
+            ].join('\n')
+
+
         }
 
     };
