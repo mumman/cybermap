@@ -142,10 +142,7 @@ define(["shaders"], function(shaders){
         //buffer
         var vertices=null;
         var texcoord=null;
-
-
-
-
+        
         //获得数据并回调处理
         var load_label_data=function(callback){
             $.getJSON('data/labels.json', function(json){
