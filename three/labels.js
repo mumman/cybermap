@@ -142,7 +142,7 @@ define(["shaders"], function(shaders){
         //buffer
         var vertices=null;
         var texcoord=null;
-        
+
         //获得数据并回调处理
         var load_label_data=function(callback){
             $.getJSON('data/labels.json', function(json){
@@ -303,20 +303,11 @@ define(["shaders"], function(shaders){
         //渲染labels
         var draw_labels=function(){
 
-
-
-
             geometry.addAttribute('position',vertices);
             geometry.addAttribute('a_texcoord',texcoord);
 
 
-
-
-
-
             //材质
-
-
             var customUniforms=shaders.shader['labels'].uniforms;
             customUniforms.t_color.value=texture;
             customUniforms.inside.value=true;
@@ -331,20 +322,6 @@ define(["shaders"], function(shaders){
             });
             labels=new THREE.Mesh(geometry, material);
             resolve(labels);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

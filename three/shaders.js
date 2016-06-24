@@ -228,7 +228,7 @@ define(function(){
         },
 
         'labels':{
-            uniform:{
+            uniforms:{
                 color: {type: "v4", value: new THREE.Vector4(0.0, 0.0, 0.0, 0.0)},
                 circle_of_interest: {type:"v4", value: new THREE.Vector4(0.0, 0.0, 0.0, 0.0)},
                 inside: {type: "b", value: true},
