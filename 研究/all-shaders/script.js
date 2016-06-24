@@ -6517,7 +6517,7 @@ var GTW = GTW || {};
 				function o() {  //这个对象 文字信息保存变量 
 					this.coord = vec3.create(), //建议使用 new THREE.Vector3();
 					this.coord[2] = 0.0001, //z坐标
-					this.pos = , //第二个摩卡多坐标?
+					this.pos =vec3.create() , //第二个摩卡多坐标?
 					this.mat = mat4.create(),
 					this.box = vec4.create(), //这个盒子干嘛?
 					this.name = '',

@@ -163,7 +163,9 @@ define(["shaders"], function(shaders){
                     }
                     $.each(jsondata, function(index, value){
                         var a=new TextInf(); //上面保存变量对象
-                        a.coord.copy(value.coord);
+                      //  a.coord.copy(value.coord);
+                        a.coord.x=value.coord[0];
+                        a.coord.y=value.coord[1];
                         a.coord.z*=2;
                         a.name=value.name;
                         a.font_size=value.font_size;
@@ -225,7 +227,6 @@ define(["shaders"], function(shaders){
                     o.cross(n);    //vec3.cross(o, n, o);
                     o.normalize();    //vec3.normalize(o, o);
                     a.crossVectors(o, n);     //vec3.cross(a, o, n);
-                    t.elements;
 
                     t.elements[0]=o.x;
                     t.elements[1]=o.y;
@@ -238,7 +239,7 @@ define(["shaders"], function(shaders){
                     t.elements[10]=a.z;
                     t.makeRotationX(Math.PI/2);     //mat4.rotateX(t, t, HALF_PI);
                 }
-                t.multiplyScalar([i, u, 1]);    //mat4.scale(t, t, [i,u,1]);
+                t.scale([i, u, 1]);    //mat4.scale(t, t, [i,u,1]);
                 t.elements[12]=r[0];
                 t.elements[13]=r[1];
                 t.elements[14]=r[2];
@@ -264,15 +265,10 @@ define(["shaders"], function(shaders){
 
 
 
-                //attribute
+                //buffer
                 vertices=new THREE.BufferAttribute(new Float32Array(vectex_count*3),3);
                 texcoord=new THREE.BufferAttribute(new Float32Array(vectex_count*2),2);
-
-
                 var index=0;
-
-
-
                 $.each(labelsArray, function(key, value){  //这里才是修改了之前的坐标?
                     // e.iso2 == l.geoip_iso2 ? e.coord[2] = 0.015 : e.coord[2] = 0.001,//用户位置,不要坐标点
                     r(value.pos, value.coord);//下面定义了以三维向量
@@ -286,6 +282,7 @@ define(["shaders"], function(shaders){
                         u.transformDirection(value.mat);         //vec3.transformMat4(u, u, e.mat);
                        // i.push(u.x, u.y, u.z); //position?
                         vertices.setXYZ(index, u.x, u.y, u.z);
+                        //console.log(vertices.array);
                         u.x=0.5*(1+c[o+0]);
                         u.y=0.5*(1+c[o+1]);
 
@@ -302,17 +299,25 @@ define(["shaders"], function(shaders){
 
         //渲染labels
         var draw_labels=function(){
+            //var indices=[];
 
+
+
+
+
+           // geometry.setIndex(new ( vertices.count>65535 ? THREE.Uint32Attribute : THREE.Uint16Attribute )(indices, 1));
             geometry.addAttribute('position',vertices);
-            geometry.addAttribute('a_texcoord',texcoord);
+            console.log(vertices);
+           // geometry.addAttribute('a_texcoord',texcoord);
 
 
+/*
             //材质
             var customUniforms=shaders.shader['labels'].uniforms;
             customUniforms.t_color.value=texture;
-            customUniforms.inside.value=true;
-            customUniforms.color.value=new THREE.Vector4(0.0, 0.0, 0.0,0.0);
-            customUniforms.circle_of_interest.value=new THREE.Vector4(0.0, 0.0, 0.0,0.0);
+           // customUniforms.inside.value=true;
+         //   customUniforms.color.value=new THREE.Vector4(0.0, 0.0, 0.0,0.0);
+          //  customUniforms.circle_of_interest.value=new THREE.Vector4(0.0, 0.0, 0.0,0.0);
 
             var material=new THREE.ShaderMaterial({
                 uniforms: customUniforms,
@@ -322,15 +327,17 @@ define(["shaders"], function(shaders){
             });
             labels=new THREE.Mesh(geometry, material);
             resolve(labels);
+*/
 
 
 
-            /*var material=new THREE.MeshBasicMaterial({map: texture, transparent: true});
-            var labelPlane=new THREE.PlaneBufferGeometry(2048, 2048);
+           // var material=new THREE.MeshBasicMaterial({map: texture,transparent: true});
+            var material=new THREE.MeshBasicMaterial({wireframe:true});
+           var labelPlane=new THREE.PlaneBufferGeometry(2048, 2048);
 
-            var labels=new THREE.Mesh(labelPlane, material);
+            var labels=new THREE.Mesh(geometry, material);
             labels.position.set(0, 0, 0);
-            resolve(labels);*/
+            resolve(labels);
 
 
 
