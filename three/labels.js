@@ -126,13 +126,58 @@ define(["shaders"], function(shaders){
     })();
 
 
+
+    THREE.Matrix4.prototype.GTWrotateX=function(theta){
+        var n = Math.sin(theta),
+            o = Math.cos(theta);
+        var e=this.elements;
+
+        var a = e[4],
+            i = e[5],
+            u = e[6],
+            c = e[7],
+            l = e[8],
+            s = e[9],
+            f = e[10],
+            v = e[11];
+
+        e[4] = a * o + l * n;
+        e[5] = i * o + s * n;
+        e[6] = u * o + f * n;
+        e[7] = c * o + v * n;
+        e[8] = l * o - a * n;
+        e[9] = s * o - i * n;
+        e[10] = f * o - u * n;
+        e[11] = v * o - c * n;
+
+        return this;
+
+    };
+
+
+
+
+
+
+
+
+
+
+    var projectionName="ecef"||"mercator";
+
     var promise=new Promise(function(resolve, reject){
         var t=2048;
-
         var vectex_count=0;//顶点数量
         var labelsArray=[];
+        var geoip_iso2=null;//直接设置为null,用户位置
         var country_count=0;
         var city_count=0;
+
+        var labels={
+            projectionName:"ecef"||"mercator",
+            labelsMesh:null,
+            customUniforms:null
+        }
 
 
         /*===========*/
@@ -144,7 +189,7 @@ define(["shaders"], function(shaders){
         var texcoord=null;
 
         //获得数据并回调处理
-        var load_label_data=function(callback){
+        labels.load_label_data=function(callback){
             $.getJSON('data/labels.json', function(json){
                 function TextInf(){  //这个对象 文字信息保存变量
                     this.coord=new THREE.Vector3(); //vec3.create()
@@ -157,11 +202,16 @@ define(["shaders"], function(shaders){
                 }
 
                 function setLabel(jsondata, r, n){
-                    if(r){ //干嘛要这么做啊?
-                        if(n && jsondata.font_size<5) return;
-                        if(!n && jsondata.font_size>5) return;
-                    }
                     $.each(jsondata, function(index, value){
+                        if(r){ //干嘛要这么做啊?
+                            if(n && value.font_size<5){
+                                return;
+                            }
+                            if(!n && value.font_size>5){
+                                return;
+                            }
+                        }
+
                         var a=new TextInf(); //上面保存变量对象
                       //  a.coord.copy(value.coord);
                         a.coord.x=value.coord[0];
@@ -170,6 +220,7 @@ define(["shaders"], function(shaders){
                         a.name=value.name;
                         a.font_size=value.font_size;
                         r ? a.name.en=a.name.en.toUpperCase() : a.font_size=3;
+                        value.iso2 && (a.iso2 = value.iso2);
                         labelsArray.push(a); //labels数组保存a对象.
                     });
                 }
@@ -194,8 +245,7 @@ define(["shaders"], function(shaders){
             n.font='30px Ubuntu Mono';
             n.fillStyle='white';
             n.textBaseline='top';
-            //n.fillText("zzz", 1000, 980);
-            var o=[0, 500];//为不是coord啊?
+            var o=[0, 0];//为不是coord啊?
             var a=35;
 
             $.each(labelsArray, function(index, value){//原来遍历的方法是另一种方法啊?遍历labels
@@ -207,7 +257,6 @@ define(["shaders"], function(shaders){
                 value.box.set(o[0], o[1], o[0]+u, o[1]+a);
                 value.box.multiplyScalar(1/t);
                 o[0]+=u; //这不是按顺写label,?坐标用在那里了?
-
             });
 
 
@@ -222,9 +271,9 @@ define(["shaders"], function(shaders){
             function t(t, r, i, u){ //干嘛?看不懂
                 t.identity();//mat4.identity(t); //矩阵恒等?
                 if('ecef'==projection){
-                    n.divideScalar(r);    //vec3.normalize(n, r); 这个就是除以r???
+                    n.copy(r).normalize();//vec3.normalize(n, r); 这个就是除以r???
                     o.set(0, 1, 0);   // vec3.set(o, 0, 1, 0);
-                    o.cross(n);    //vec3.cross(o, n, o);
+                    o.crossVectors(n, o);    //vec3.cross(o, n, o);
                     o.normalize();    //vec3.normalize(o, o);
                     a.crossVectors(o, n);     //vec3.cross(a, o, n);
 
@@ -237,12 +286,12 @@ define(["shaders"], function(shaders){
                     t.elements[8]=a.x;
                     t.elements[9]=a.y;
                     t.elements[10]=a.z;
-                    t.makeRotationX(Math.PI/2);     //mat4.rotateX(t, t, HALF_PI);
+                    t.GTWrotateX(Math.PI/2);     //mat4.rotateX(t, t, HALF_PI);
                 }
-                t.scale([i, u, 1]);    //mat4.scale(t, t, [i,u,1]);
-                t.elements[12]=r[0];
-                t.elements[13]=r[1];
-                t.elements[14]=r[2];
+                t.scale(new THREE.Vector3(i, u, 1));    //mat4.scale(t, t, [i,u,1]);
+                t.elements[12]=r.x;
+                t.elements[13]=r.y;
+                t.elements[14]=r.z;
             }
 
 
@@ -270,7 +319,7 @@ define(["shaders"], function(shaders){
                 texcoord=new THREE.BufferAttribute(new Float32Array(vectex_count*2),2);
                 var index=0;
                 $.each(labelsArray, function(key, value){  //这里才是修改了之前的坐标?
-                    // e.iso2 == l.geoip_iso2 ? e.coord[2] = 0.015 : e.coord[2] = 0.001,//用户位置,不要坐标点
+                    value.iso2 == geoip_iso2 ? value.coord.z = 0.015 : value.coord.z = 0.001;//这个修改coord值
                     r(value.pos, value.coord);//下面定义了以三维向量
                     var n=1*value.font_size;
                     t(value.mat, value.pos, n*(value.box.z-value.box.x), n*(value.box.w-value.box.y));//上面的t函数//转化成魔卡托坐标?
@@ -279,7 +328,7 @@ define(["shaders"], function(shaders){
                         u.x=c[o+0];
                         u.y=c[o+1];
                         u.z=0;
-                        u.transformDirection(value.mat);         //vec3.transformMat4(u, u, e.mat);
+                        u.applyProjection(value.mat);         //vec3.transformMat4(u, u, e.mat);
                        // i.push(u.x, u.y, u.z); //position?
                         vertices.setXYZ(index, u.x, u.y, u.z);
                         //console.log(vertices.array);
@@ -287,7 +336,7 @@ define(["shaders"], function(shaders){
                         u.y=0.5*(1+c[o+1]);
 
                         u.x=GTW.lerp(value.box.z, value.box.x, u.x);
-                        u.x=GTW.lerp(value.box.w, value.box.y, u.y);
+                        u.y=GTW.lerp(value.box.w, value.box.y, u.y);
                        // i.push(u.x, u.y);//uv?
                         texcoord.setXY(index, u.x, u.y);
                         index++;
@@ -300,21 +349,14 @@ define(["shaders"], function(shaders){
         //渲染labels
         var draw_labels=function(){
             //var indices=[];
-
-
-
-
-
            // geometry.setIndex(new ( vertices.count>65535 ? THREE.Uint32Attribute : THREE.Uint16Attribute )(indices, 1));
             geometry.addAttribute('position',vertices);
-            console.log(vertices);
-           // geometry.addAttribute('a_texcoord',texcoord);
-
+            geometry.addAttribute('a_texcoord',texcoord);
 
 /*
             //材质
             var customUniforms=shaders.shader['labels'].uniforms;
-            customUniforms.t_color.value=texture;
+            //customUniforms.t_color.value=texture;
            // customUniforms.inside.value=true;
          //   customUniforms.color.value=new THREE.Vector4(0.0, 0.0, 0.0,0.0);
           //  customUniforms.circle_of_interest.value=new THREE.Vector4(0.0, 0.0, 0.0,0.0);
@@ -326,31 +368,21 @@ define(["shaders"], function(shaders){
                 transparent: true
             });
             labels=new THREE.Mesh(geometry, material);
-            resolve(labels);
-*/
-
-
+            resolve(labels);*/
 
            // var material=new THREE.MeshBasicMaterial({map: texture,transparent: true});
             var material=new THREE.MeshBasicMaterial({wireframe:true});
            var labelPlane=new THREE.PlaneBufferGeometry(2048, 2048);
 
-            var labels=new THREE.Mesh(geometry, material);
-            labels.position.set(0, 0, 0);
+            labels.labelsMesh=new THREE.Mesh(geometry, material);
+            labels.labelsMesh.position.set(0, 0, 0);
             resolve(labels);
-
-
-
-
-
-
-
 
         };
 
-        load_label_data(function(){
+        labels.load_label_data(function(){
             render_labels("en");
-            project_labels("ecef");
+            project_labels(labels.projectionName);
             draw_labels();
         })
 

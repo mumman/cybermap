@@ -227,19 +227,39 @@ define(function(){
             ].join('\n')
         },
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         'labels':{
             uniforms:{
                // color: {type: "v4", value: new THREE.Vector4(0.0, 0.0, 0.0, 1.0)},
                // circle_of_interest: {type:"v4", value: new THREE.Vector4(0.0, 0.0, 0.0, 1.0)},
                // inside: {type: "b", value: false},
-                t_color: {type: "t", value: null}
+               // t_color: {type: "t", value: null},
+                color:{type:'v4',value: new THREE.Vector4( 255, 255, 255,0.5)}
 
             },
             vertexShader:[
                // 'uniform bool inside',
-                'attribute vec2 a_texcoord',
                 'attribute vec3 position',
-                'varying vec2 v_texcoord',
+               // 'attribute vec2 a_texcoord',
+               // 'varying vec2 v_texcoord',
                 //'varying float v_alpha;',
                 'void main()',
                 '{',
@@ -247,19 +267,21 @@ define(function(){
                // 'v_alpha = max(0.0, 1.0 - distance(position, circle_of_interest.xyz)/circle_of_interest.a);',
                 //  'if(!inside)',
                  //   'v_alpha=pow(1.0-v_alpha,6.0);',
-                    'v_texcoord=a_texcoord;',
+                //'v_texcoord=a_texcoord;',
                 '}'
             ].join('\n'),
             fragmentShader:[
-                'uniform sampler2D t_color',
-                'varying vec2 v_texcoord',
+                //'uniform sampler2D t_color',
+                'uniform vec4 color',
+                //'varying vec2 v_texcoord',
                // 'varying float v_alpha',
                 'void mai(){',
-                    'gl_FragColor=texture2D(t_color,v_texcoord);',
+                    //'gl_FragColor=texture2D(t_color,v_texcoord);',
+                    'gl_FragColor=color;',
                    // 'gl_FragColor.a=0.7*v_alpha;',
+
                 '}'
             ].join('\n')
-
 
         }
 

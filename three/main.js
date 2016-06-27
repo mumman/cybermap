@@ -36,7 +36,7 @@ require(['earth', 'stars', 'corona','labels','gui'], function(earth, stars, coro
         scene.add(corona.corona);
         //scene.add(labels.labels);
         labels.labels.then(function(value){
-            scene.add(value);
+            scene.add(value.labelsMesh);
         });
 
 
@@ -165,6 +165,21 @@ require(['earth', 'stars', 'corona','labels','gui'], function(earth, stars, coro
      */
 
 
+
+    /* labels切换尝试
+    if(gui.controls.switchPlane){
+        labels.labels.then(function(value){
+            value.projectionName='mercator';
+            console.log(value.projectionName);
+        });
+    }else{
+        labels.labels.then(function(value){
+            value.projectionName='ecef';
+            console.log(value.projectionName);
+        });
+    }*/
+
+
     function animate(){
         requestAnimationFrame(animate);
         render();
@@ -182,11 +197,15 @@ require(['earth', 'stars', 'corona','labels','gui'], function(earth, stars, coro
             if(earth.customUniforms.blend.value<=1){
                 earth.customUniforms.blend.value+=0.01;
             }
+            labels.projectionName='ecef';
+
 
         }else{
             if(earth.customUniforms.blend.value>=0){
                 earth.customUniforms.blend.value-=0.01;
             }
+            labels.projectionName='mercator';
+
         }
 
         //切换颜色

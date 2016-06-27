@@ -5920,7 +5920,7 @@ function() {
                         t.labels.push(a)
                     })
                 }
-                n(),
+               
                 a(r.countries, !0, !0),
                 t.country_count = t.labels.length,
                 a(r.cities, !1, !1),
@@ -5960,7 +5960,22 @@ function() {
         e.prototype.project_labels = function(e) {
             function t(t, r, i, u) {
                 mat4.identity(t),
-                "ecef" == e && (vec3.normalize(n, r), vec3.set(o, 0, 1, 0), vec3.cross(o, n, o), vec3.normalize(o, o), vec3.cross(a, o, n), t[0] = o[0], t[1] = o[1], t[2] = o[2], t[4] = n[0], t[5] = n[1], t[6] = n[2], t[8] = a[0], t[9] = a[1], t[10] = a[2], mat4.rotateX(t, t, HALF_PI)),
+                "ecef" == e && (
+				vec3.normalize(n, r),
+				vec3.set(o, 0, 1, 0), 
+				vec3.cross(o, n, o),
+				vec3.normalize(o, o),
+				vec3.cross(a, o, n),
+				t[0] = o[0],
+				t[1] = o[1], 
+				t[2] = o[2],
+				t[4] = n[0],
+				t[5] = n[1],
+				t[6] = n[2],
+				t[8] = a[0],
+				t[9] = a[1], 
+				t[10] = a[2],
+				mat4.rotateX(t, t, HALF_PI)),
                 mat4.scale(t, t, [i, u, 1]),
                 t[12] = r[0],
                 t[13] = r[1],
