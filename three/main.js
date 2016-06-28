@@ -47,7 +47,6 @@ require(['earth', 'stars', 'corona','labels','gui'], function(earth, stars, coro
 
 
 
-
         /*  var geometry = new THREE.BoxGeometry( 10, 10, 10 );
           var material = new THREE.MeshBasicMaterial( {color: 0xffffff} );
           var cube = new THREE.Mesh( geometry, material );
@@ -166,18 +165,35 @@ require(['earth', 'stars', 'corona','labels','gui'], function(earth, stars, coro
 
 
 
-    /* labels切换尝试
-    if(gui.controls.switchPlane){
-        labels.labels.then(function(value){
-            value.projectionName='mercator';
-            console.log(value.projectionName);
-        });
-    }else{
-        labels.labels.then(function(value){
-            value.projectionName='ecef';
-            console.log(value.projectionName);
-        });
-    }*/
+
+    // labels切换尝试
+    gui.controls.switchPlaneController.onChange(function(value){
+        if(value){
+            labels.labels.then(function(value){
+                value.projectionName='ecef';
+                value.load_label_data(function(){
+                    value.render_labels("en");
+                    value.project_labels(value.projectionName);
+                    value.draw_labels();
+                    //scene.remove(value.labelsMesh);
+                   // scene.add(value.labelsMesh);
+                });
+            });
+        }else{
+            labels.labels.then(function(value){
+
+                value.projectionName='mercator';
+                value.load_label_data(function(){
+                    value.render_labels("en");
+                    value.project_labels(value.projectionName);
+                    value.draw_labels();
+                  //  scene.remove(value.labelsMesh);
+                  //  scene.add(value.labelsMesh);
+                });
+            });
+        }
+    });
+
 
 
     function animate(){
@@ -192,19 +208,19 @@ require(['earth', 'stars', 'corona','labels','gui'], function(earth, stars, coro
         //光晕云图动画
         corona.customUniforms.time.value=t;
 
-        //切换平面
+        //球体切换平面
         if(gui.controls.switchPlane){
             if(earth.customUniforms.blend.value<=1){
                 earth.customUniforms.blend.value+=0.01;
             }
-            labels.projectionName='ecef';
+
 
 
         }else{
             if(earth.customUniforms.blend.value>=0){
                 earth.customUniforms.blend.value-=0.01;
             }
-            labels.projectionName='mercator';
+
 
         }
 

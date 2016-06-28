@@ -162,9 +162,6 @@ define(["shaders"], function(shaders){
 
 
 
-
-    var projectionName="ecef"||"mercator";
-
     var promise=new Promise(function(resolve, reject){
         var t=2048;
         var vectex_count=0;//顶点数量
@@ -173,11 +170,12 @@ define(["shaders"], function(shaders){
         var country_count=0;
         var city_count=0;
 
-        var labels={
-            projectionName:"ecef"||"mercator",
-            labelsMesh:null,
-            customUniforms:null
-        }
+        var labels=new function(){
+            this.projectionName="mercator";
+            this.labelsMesh=null;
+            this.customUniforms=null;
+
+        };
 
 
         /*===========*/
@@ -236,7 +234,7 @@ define(["shaders"], function(shaders){
             });
         }
         //制作纹理
-        var render_labels=function(e){
+        labels.render_labels=function(e){
             var r=document.createElement('canvas');
             r.width=r.height=t;//2048
             var n=r.getContext('2d');
@@ -265,7 +263,7 @@ define(["shaders"], function(shaders){
         }
 
         //坐标转换投影
-        var project_labels=function(projection){/*创建球面label的网格*/
+        labels.project_labels=function(projection){/*创建球面label的网格*/
 
 
             function t(t, r, i, u){ //干嘛?看不懂
@@ -347,7 +345,7 @@ define(["shaders"], function(shaders){
         };
 
         //渲染labels
-        var draw_labels=function(){
+        labels.draw_labels=function(){
             //var indices=[];
            // geometry.setIndex(new ( vertices.count>65535 ? THREE.Uint32Attribute : THREE.Uint16Attribute )(indices, 1));
             geometry.addAttribute('position',vertices);
@@ -380,12 +378,12 @@ define(["shaders"], function(shaders){
 
         };
 
+        //运行渲染
         labels.load_label_data(function(){
-            render_labels("en");
-            project_labels(labels.projectionName);
-            draw_labels();
+            labels.render_labels("en");
+            labels.project_labels(labels.projectionName);
+            labels.draw_labels();
         })
-
 
     });
 
