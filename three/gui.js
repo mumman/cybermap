@@ -17,20 +17,6 @@ define(['labels'],function(labels){
     });
 */
 
- /*  // labels切换尝试
-    if(controls.switchPlane){
-        labels.labels.then(function(value){
-            value.projectionName='mercator';
-            console.log(value.projectionName);
-        });
-    }else{
-        labels.labels.then(function(value){
-            value.projectionName='ecef';
-            console.log(value.projectionName);
-        });
-    }
-*/
-
     console.log("gui.js");
     return {
         controls:controls

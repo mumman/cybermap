@@ -74,59 +74,8 @@ define(["shaders"], function(shaders){
 
      */
 
-    //投影坐标变换
-    var GTW=GTW || {};
 
-    (function(){
-        var e=1, t=10;
-        var clamp=THREE.Math.clamp;
-        var deg2rad=THREE.Math.degToRad;
-        GTW.project_mercator=function(r, n){
-            var o=n.x,
-                a=n.y,
-                i=Math.PI*a/180,
-                u=90/Math.PI*Math.log(Math.tan(0.25*Math.PI+0.5*i));
-
-            r.x=-o/180*t;
-            r.y=clamp(u/90, -1, 1)*t;
-            r.z=-e*n.z*t;
-        };
-        GTW.project_ecef=function(r, n){
-
-            var o=deg2rad(n.x),
-                a=deg2rad(n.y),
-                i=e*n.z,
-                u=Math.cos(a),
-                c=Math.sin(a),
-                l=1,
-                s=1;
-
-            r.x=-(l+i)*u*Math.cos(o)*t;
-            r.z=(l+i)*u*Math.sin(o)*t;
-            r.y=(s+i)*c*t;
-        };
-        GTW.lerp= function (value1, value2, amount) {
-            amount = amount < 0 ? 0 : amount;
-            amount = amount > 1 ? 1 : amount;
-            return value1 + (value2 - value1) * amount;
-        };
-
-        GTW.clamp = function (value, min, max) {
-
-            if (value < min) {
-                return min;
-            }
-            else if (value > max) {
-                return max;
-            }
-
-            return value;
-        };
-
-    })();
-
-
-
+    //扩充函数
     THREE.Matrix4.prototype.GTWrotateX=function(theta){
         var n = Math.sin(theta),
             o = Math.cos(theta);
@@ -156,12 +105,7 @@ define(["shaders"], function(shaders){
 
 
 
-
-
-
-
-
-
+//labels.js
     var promise=new Promise(function(resolve, reject){
         var t=2048;
         var vectex_count=0;//顶点数量
@@ -171,7 +115,7 @@ define(["shaders"], function(shaders){
         var city_count=0;
 
         var labels=new function(){
-            this.projectionName="mercator";
+            this.projectionName="ecef";//ecef..mercator
             this.labelsMesh=null;
             this.customUniforms=null;
 
@@ -238,7 +182,7 @@ define(["shaders"], function(shaders){
             var r=document.createElement('canvas');
             r.width=r.height=t;//2048
             var n=r.getContext('2d');
-            n.fillStyle="rgba( 0, 0, 0, 0 )";//背景改成黑色透明,原先是只是黑色
+            n.fillStyle="#000";//n.fillStyle="rgba( 0, 0, 0, 0 )  #000"
             n.fillRect(0, 0, r.width, r.height);
             n.font='30px Ubuntu Mono';
             n.fillStyle='white';
@@ -259,8 +203,12 @@ define(["shaders"], function(shaders){
 
 
             texture=new THREE.Texture(r);
+
+            /*texture.format= THREE.LuminanceFormat;
+            texture.type= THREE.UnsignedByteType;
+            texture.generateMipmaps=true;*/
             texture.needsUpdate=true;
-        }
+        };
 
         //坐标转换投影
         labels.project_labels=function(projection){/*创建球面label的网格*/
@@ -341,48 +289,60 @@ define(["shaders"], function(shaders){
                     }
                 });
 
+                //var indices=[];
+                // geometry.setIndex(new ( vertices.count>65535 ? THREE.Uint32Attribute : THREE.Uint16Attribute )(indices, 1));
+                geometry.addAttribute('position',vertices);
+                geometry.addAttribute('a_texcoord',texcoord);
+
+
+
             }
         };
 
         //渲染labels
-        labels.draw_labels=function(){
-            //var indices=[];
-           // geometry.setIndex(new ( vertices.count>65535 ? THREE.Uint32Attribute : THREE.Uint16Attribute )(indices, 1));
-            geometry.addAttribute('position',vertices);
-            geometry.addAttribute('a_texcoord',texcoord);
+        labels.draw_labels=function(e){
+            var H = [-90, 30.0444];
+            e.geocam.coord.setX(H[0]);
+            e.geocam.coord.setY(H[1]);
+            e.geocam.coord.setZ(3.53);
+            var r=new THREE.Vector3();
+            e.project(r, e.geocam.coord);
+            var t = 3,
+                n = 10,
+                o = GTW.lerp(t, n, e.projection.blend);
 
-/*
             //材质
-            var customUniforms=shaders.shader['labels'].uniforms;
-            //customUniforms.t_color.value=texture;
-           // customUniforms.inside.value=true;
-         //   customUniforms.color.value=new THREE.Vector4(0.0, 0.0, 0.0,0.0);
-          //  customUniforms.circle_of_interest.value=new THREE.Vector4(0.0, 0.0, 0.0,0.0);
+            labels.customUniforms=shaders.shader['labels'].uniforms;
+            labels.customUniforms.t_color.value=texture;
+            labels.customUniforms.inside.value=0;
+            labels.customUniforms.color.value=new THREE.Vector4(255, 255, 255, 1.0);
+            labels.customUniforms.circle_of_interest.value=new THREE.Vector4(r.x, r.y, r.z, o);
 
             var material=new THREE.ShaderMaterial({
-                uniforms: customUniforms,
+                uniforms: labels.customUniforms,
                 vertexShader: shaders.shader['labels'].vertexShader,
                 fragmentShader: shaders.shader['labels'].fragmentShader,
-                transparent: true
+                transparent: true,
+                side:THREE.DoubleSide,
+               // wireframe:true
             });
-            labels=new THREE.Mesh(geometry, material);
-            resolve(labels);*/
-
-           // var material=new THREE.MeshBasicMaterial({map: texture,transparent: true});
-            var material=new THREE.MeshBasicMaterial({wireframe:true});
-           var labelPlane=new THREE.PlaneBufferGeometry(2048, 2048);
-
             labels.labelsMesh=new THREE.Mesh(geometry, material);
             labels.labelsMesh.position.set(0, 0, 0);
             resolve(labels);
 
+
+           /* var material=new THREE.MeshBasicMaterial({map: texture,transparent: true});
+           var labelPlane=new THREE.PlaneBufferGeometry(2048, 2048);
+            labels.labelsMesh=new THREE.Mesh(labelPlane, material);
+            labels.labelsMesh.position.set(0, 0, 0);
+            resolve(labels);*/
         };
 
         //运行渲染
         labels.load_label_data(function(){
             labels.render_labels("en");
             labels.project_labels(labels.projectionName);
-            labels.draw_labels();
+            labels.draw_labels(GTW.z);
         })
 
     });

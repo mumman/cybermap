@@ -174,7 +174,7 @@ require(['earth', 'stars', 'corona','labels','gui'], function(earth, stars, coro
                 value.load_label_data(function(){
                     value.render_labels("en");
                     value.project_labels(value.projectionName);
-                    value.draw_labels();
+                    value.draw_labels(GTW.z);
                     //scene.remove(value.labelsMesh);
                    // scene.add(value.labelsMesh);
                 });
@@ -186,7 +186,7 @@ require(['earth', 'stars', 'corona','labels','gui'], function(earth, stars, coro
                 value.load_label_data(function(){
                     value.render_labels("en");
                     value.project_labels(value.projectionName);
-                    value.draw_labels();
+                    value.draw_labels(GTW.z);
                   //  scene.remove(value.labelsMesh);
                   //  scene.add(value.labelsMesh);
                 });

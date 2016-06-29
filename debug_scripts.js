@@ -5997,10 +5997,10 @@ function() {
                     var n = 1 * e.font_size;
                     t(e.mat, e.pos, n * (e.box[2] - e.box[0]), n * (e.box[3] - e.box[1]));
                     for (var o = 0; o < c.length; o += 2) {
-						u[0] = c[o + 0],
-						u[1] = c[o + 1],
-						u[2] = 0,
-						vec3.transformMat4(u, u, e.mat),
+						u[0] = c[o + 0];
+						u[1] = c[o + 1];
+						u[2] = 0;
+						vec3.transformMat4(u, u, e.mat);
 						i.push(u[0], u[1], u[2]);
 						u[0] = .5 * (1 + c[o + 0]);
 						u[1] = .5 * (1 + c[o + 1]);
@@ -6017,18 +6017,18 @@ function() {
         var r = vec3.create();
         return e.prototype.draw = function(e) {
             if (0 != this.labels.length) {
-                gl.enable(gl.DEPTH_TEST),
-                gl.enable(gl.BLEND),
-                gl.blendFunc(gl.SRC_ALPHA, gl.ONE),
-                gl.depthMask(!1),
+                gl.enable(gl.DEPTH_TEST);
+                gl.enable(gl.BLEND);
+                gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
+                gl.depthMask(!1);
                 e.project(r, e.geocam.coord);
                 var t = 3,
                 n = 10,
                 o = lerp(t, n, e.projection.blend),
                 a = this.programs.label.use();
-                a.uniformMatrix4fv("mvp", e.camera.mvp),
-                a.uniform4f("circle_of_interest", r[0], r[1], r[2], o),
-                a.uniformSampler2D("t_color", this.texture),
+                a.uniformMatrix4fv("mvp", e.camera.mvp);
+                a.uniform4f("circle_of_interest", r[0], r[1], r[2], o);
+                a.uniformSampler2D("t_color", this.texture);
                 webgl.bindVertexBuffer(this.buffers.vert),
                 a.vertexAttribPointer("position", 3, gl.FLOAT, !1, 20, 0),
                 a.vertexAttribPointer("texcoord", 2, gl.FLOAT, !1, 20, 12),
@@ -7136,8 +7136,8 @@ MAP.init = function(e) {
                     var r = vec3.create();
                     v(r, t.key),
                     de.setup(z, e.center, r),
-                    vec2.copy(z.geocam.coord_target, r),
-                    vec2.copy(z.geocam.coord, r),
+                    vec2.copy(z.geocam.coord_target, r);
+                    vec2.copy(z.geocam.coord, r);
                     setTimeout(function() {
                         o(t),
                         D(null)
@@ -7514,10 +7514,10 @@ MAP.init = function(e) {
         draw_world: !0
     },
     H = [ - 90, 30.0444];
-    vec2.copy(z.geocam.coord, H),
-    vec2.copy(z.geocam.coord_target, H),
-    z.camera.near = .01,
-    z.camera.far = 200,
+    vec2.copy(z.geocam.coord, H);
+    vec2.copy(z.geocam.coord_target, H);
+    z.camera.near = .01;
+    z.camera.far = 200;
     MAP._env = z,
     (O || C) && (z.camera.near = 1);
     var Y = {

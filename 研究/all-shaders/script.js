@@ -6655,9 +6655,12 @@ var GTW = GTW || {};
 				var t = 3,
 					n = 10,
 					o = lerp(t, n, e.projection.blend),
+					
 					a = this.programs.label.use();
 				a.uniformMatrix4fv('mvp', e.camera.mvp),
+				
 				a.uniform4f('circle_of_interest', r[0], r[1], r[2], o),//–À»§»¶?
+				
 				a.uniformSampler2D('t_color', this.texture),
 				webgl.bindVertexBuffer(this.buffers.vert),
 				a.vertexAttribPointer('position', 3, gl.FLOAT, !1, 20, 0),
@@ -8291,9 +8294,9 @@ MAP.init = function(e) {
 		H = [-90,
 			30.0444
 		];
-	vec2.copy(z.geocam.coord, H),
-	vec2.copy(z.geocam.coord_target, H),
-	z.camera.near = 0.01,
+	vec2.copy(z.geocam.coord, H);
+	vec2.copy(z.geocam.coord_target, H);
+	z.camera.near = 0.01;
 	z.camera.far = 200,
 	MAP._env = z, (O || C) && (z.camera.near = 1);
 	var Y = {

@@ -3,6 +3,25 @@
  */
 define(function(){
     var shader = {
+        'basic':{
+            uniforms:{
+                color:{type:'v4',value: new THREE.Vector4( 255, 255, 255,1.0)}
+            },
+            vertexShader:[
+                'void main()',
+                '{',
+                'gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );',
+                '}'
+            ].join('\n'),
+            fragmentShader:[
+                'uniform vec4 color;',
+                'void main()',
+                '{',
+                'gl_FragColor = color;',
+                '}'
+            ].join('\n')
+        },
+
         'earth':{
             uniforms:{
                 baseTexture: {type: "t", value: null},
@@ -229,56 +248,95 @@ define(function(){
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        'labels':{
+        'basic':{
             uniforms:{
-               // color: {type: "v4", value: new THREE.Vector4(0.0, 0.0, 0.0, 1.0)},
-               // circle_of_interest: {type:"v4", value: new THREE.Vector4(0.0, 0.0, 0.0, 1.0)},
-               // inside: {type: "b", value: false},
-               // t_color: {type: "t", value: null},
-                color:{type:'v4',value: new THREE.Vector4( 255, 255, 255,0.5)}
-
+                color:{type:'v4',value: new THREE.Vector4( 255, 255, 255,1.0)}
             },
             vertexShader:[
-               // 'uniform bool inside',
-                'attribute vec3 position',
-               // 'attribute vec2 a_texcoord',
-               // 'varying vec2 v_texcoord',
-                //'varying float v_alpha;',
                 'void main()',
                 '{',
                 'gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );',
-               // 'v_alpha = max(0.0, 1.0 - distance(position, circle_of_interest.xyz)/circle_of_interest.a);',
-                //  'if(!inside)',
-                 //   'v_alpha=pow(1.0-v_alpha,6.0);',
-                //'v_texcoord=a_texcoord;',
                 '}'
             ].join('\n'),
             fragmentShader:[
-                //'uniform sampler2D t_color',
-                'uniform vec4 color',
-                //'varying vec2 v_texcoord',
-               // 'varying float v_alpha',
-                'void mai(){',
-                    //'gl_FragColor=texture2D(t_color,v_texcoord);',
-                    'gl_FragColor=color;',
-                   // 'gl_FragColor.a=0.7*v_alpha;',
+                'uniform vec4 color;',
+                'void main()',
+                '{',
+                'gl_FragColor = color;',
+                '}'
+            ].join('\n')
+        },
+
+
+
+/*
+
+        // label //
+        attribute vec3 position;
+        attribute vec2 texcoord;
+        varying float v_alpha;
+        varying vec2 v_texcoord;
+        uniform mat4 mvp;
+        uniform vec4 color;
+        uniform vec4 circle_of_interest;
+        uniform bool inside;
+        uniform sampler2D t_color;
+
+    // label.vertex //
+    void main() {
+        gl_Position = mvp * vec4(position, 1.0);
+        v_alpha = max(0.0, 1.0 - distance(position, circle_of_interest.xyz)/circle_of_interest.a);
+        if (!inside)
+            v_alpha = pow(1.0 - v_alpha, 6.0);
+        v_texcoord = texcoord;
+    }
+
+    // label.fragment //
+    void main() {
+        gl_FragColor = texture2D(t_color, v_texcoord);
+        gl_FragColor.a = 0.7 * v_alpha;
+    },
+*/
+
+
+
+
+
+
+
+
+
+
+    'labels':{
+            uniforms:{
+                color:{type:'v4',value: new THREE.Vector4( 255, 255, 255,1.0)},
+                circle_of_interest: {type:"v4", value: new THREE.Vector4(0.0, 0.0, 0.0, 1.0)},
+                inside: { type:"i", value: 0},
+                t_color: {type: "t", value: null}
+            },
+            vertexShader:[
+                'uniform bool inside;',
+                'uniform vec4 circle_of_interest;',
+                'attribute vec2 a_texcoord;',
+                'varying vec2 v_texcoord;',
+                'varying float v_alpha;',
+                'void main()',
+                '{',
+                'gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );',
+                'v_alpha = max(0.0, 1.0 - distance(position, circle_of_interest.xyz)/circle_of_interest.a);',
+                  'if(!inside)',
+                  'v_alpha=pow(1.0-v_alpha, 6.0);',
+                'v_texcoord=a_texcoord;',
+                '}'
+            ].join('\n'),
+            fragmentShader:[
+                'uniform sampler2D t_color;',
+                'varying vec2 v_texcoord;',
+                'varying float v_alpha;',
+                'void main()',
+                '{',
+                    'gl_FragColor=texture2D(t_color, v_texcoord);',
+                    'gl_FragColor.a=0.7*v_alpha;',
 
                 '}'
             ].join('\n')
