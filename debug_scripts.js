@@ -5872,8 +5872,8 @@ function() {
             this.geoip_iso2 = null;
             var e = this;
             this.load_label_data(function() {
-                e.render_labels("en"),
-                e.project_labels("ecef")
+                e.render_labels("en");
+                e.project_labels("ecef");//mercator ecef
             })
         }
         var t = 2048;
@@ -5945,9 +5945,9 @@ function() {
             a = 35;
             _.each(this.labels,
             function(e) {
-                var i = e.name,
+                var i = e.name;
                 u = n.measureText(i).width;
-                o[0] + u >= r.width && (o[0] = 0, o[1] += a),
+                o[0] + u >= r.width && (o[0] = 0, o[1] += a);
                 n.fillText(i, o[0], o[1] - 0),
                 vec4.set(e.box, o[0], o[1], o[0] + u, o[1] + a);
                 vec4.scale(e.box, e.box, 1 / t);
@@ -6010,8 +6010,8 @@ function() {
 					}
 					
                 }),
-                webgl.bindVertexBuffer(this.buffers.vert),
-                gl.bufferSubData(gl.ARRAY_BUFFER, 0, new Float32Array(i))
+                webgl.bindVertexBuffer(this.buffers.vert);
+                gl.bufferSubData(gl.ARRAY_BUFFER, 0, new Float32Array(i));
             }
         };
         var r = vec3.create();

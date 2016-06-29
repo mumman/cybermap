@@ -166,7 +166,7 @@ require(['earth', 'stars', 'corona','labels','gui'], function(earth, stars, coro
 
 
 
-    // labels切换尝试
+  /*  // labels切换尝试
     gui.controls.switchPlaneController.onChange(function(value){
         if(value){
             labels.labels.then(function(value){
@@ -175,8 +175,8 @@ require(['earth', 'stars', 'corona','labels','gui'], function(earth, stars, coro
                     value.render_labels("en");
                     value.project_labels(value.projectionName);
                     value.draw_labels(GTW.z);
-                    //scene.remove(value.labelsMesh);
-                   // scene.add(value.labelsMesh);
+                    scene.remove(value.labelsMesh);
+                    scene.add(value.labelsMesh);
                 });
             });
         }else{
@@ -187,12 +187,31 @@ require(['earth', 'stars', 'corona','labels','gui'], function(earth, stars, coro
                     value.render_labels("en");
                     value.project_labels(value.projectionName);
                     value.draw_labels(GTW.z);
-                  //  scene.remove(value.labelsMesh);
-                  //  scene.add(value.labelsMesh);
+                   scene.remove(value.labelsMesh);
+                   scene.add(value.labelsMesh);
                 });
             });
         }
     });
+*/
+    //labels切换尝试,修改
+    gui.controls.switchPlaneController.onChange(function(content){
+        if(content){
+            labels.labels.then(function(value){
+                value.render_labels();
+                value.project_labels("ecef")
+
+            });
+        }else{
+            labels.labels.then(function(value){
+                value.render_labels();
+                value.project_labels('mercator');
+
+            });
+        }
+    });
+
+
 
 
 
