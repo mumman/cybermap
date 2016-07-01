@@ -198,14 +198,36 @@ require(['earth', 'stars', 'corona','labels','gui'], function(earth, stars, coro
     gui.controls.switchPlaneController.onChange(function(content){
         if(content){
             labels.labels.then(function(value){
-                value.render_labels();
-                value.project_labels("ecef")
+                /*value.render_labels();
+                value.project_labels("ecef")*/
+
+                var e =value;
+                value.load_label_data(function() {
+                    e.render_labels();
+                    e.project_labels("ecef");//mercator ecef
+                    e.draw_labels(GTW.z);
+                });
+
+
+
+
+
 
             });
         }else{
             labels.labels.then(function(value){
-                value.render_labels();
-                value.project_labels('mercator');
+                /*value.render_labels();
+                value.project_labels('mercator');*/
+
+
+
+
+                var e =value;
+                value.load_label_data(function() {
+                    e.render_labels();
+                    e.project_labels("mercator");//mercator ecef
+                    e.draw_labels(GTW.z);
+                });
 
             });
         }
@@ -222,8 +244,13 @@ require(['earth', 'stars', 'corona','labels','gui'], function(earth, stars, coro
 
     function render(){
         camera.lookAt(scene.position);
+
+
         var time=performance.now()*0.001;
         var t=clock.getElapsedTime();
+
+
+
         //光晕云图动画
         corona.customUniforms.time.value=t;
 

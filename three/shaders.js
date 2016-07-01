@@ -312,17 +312,21 @@ define(function(){
                 color:{type:'v4',value: new THREE.Vector4( 255, 255, 255,1.0)},
                 circle_of_interest: {type:"v4", value: new THREE.Vector4(0.0, 0.0, 0.0, 1.0)},
                 inside: { type:"i", value: 0},
-                t_color: {type: "t", value: null}
+                t_color: {type: "t", value: null},
+                //mvp:{type:"m4v",value: new THREE.Matrix4()}
             },
             vertexShader:[
                 'uniform bool inside;',
                 'uniform vec4 circle_of_interest;',
+               // 'uniform mat4 mvp;',
                 'attribute vec2 a_texcoord;',
+                //'attribute vec2 uvs;',
                 'varying vec2 v_texcoord;',
                 'varying float v_alpha;',
                 'void main()',
                 '{',
                 'gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );',
+                //'gl_Position = mvp * vec4(position, 1.0);',
                 'v_alpha = max(0.0, 1.0 - distance(position, circle_of_interest.xyz)/circle_of_interest.a);',
                   'if(!inside)',
                   'v_alpha=pow(1.0-v_alpha, 6.0);',
