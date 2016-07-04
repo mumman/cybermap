@@ -1,4 +1,4 @@
-require(['earth', 'stars', 'corona','labels','gui'], function(earth, stars, corona, labels, gui){
+require(['earth', 'stars', 'corona','labels','gui','china'], function(earth, stars, corona, labels, gui,china){
     // some code here
     //基本
     var camera, scene, renderer, main;
@@ -39,6 +39,9 @@ require(['earth', 'stars', 'corona','labels','gui'], function(earth, stars, coro
             scene.add(value.labelsMesh);
         });
 
+        china.china.then(function(value){
+           scene.add(value.chinaMesh);
+        });
 
 
 
@@ -197,39 +200,47 @@ require(['earth', 'stars', 'corona','labels','gui'], function(earth, stars, coro
     //labels切换尝试,修改
     gui.controls.switchPlaneController.onChange(function(content){
         if(content){
+            //labels变换
             labels.labels.then(function(value){
-                /*value.render_labels();
-                value.project_labels("ecef")*/
-
                 var e =value;
                 value.load_label_data(function() {
                     e.render_labels();
                     e.project_labels("ecef");//mercator ecef
                     e.draw_labels(GTW.z);
                 });
-
-
-
-
-
+            });
+            //中国变换
+            china.china.then(function(value){
+                var e=value;
+                value.load_resources(function(){
+                    e.build_geometry('ecef');
+                    e.draw_china();
+                });
 
             });
+
+
         }else{
+
             labels.labels.then(function(value){
-                /*value.render_labels();
-                value.project_labels('mercator');*/
-
-
-
-
                 var e =value;
                 value.load_label_data(function() {
                     e.render_labels();
                     e.project_labels("mercator");//mercator ecef
                     e.draw_labels(GTW.z);
                 });
+            });
+
+            china.china.then(function(value){
+                var e=value;
+                value.load_resources(function(){
+                    e.build_geometry('mercator');
+                    e.draw_china();
+                });
 
             });
+
+
         }
     });
 
@@ -248,6 +259,7 @@ require(['earth', 'stars', 'corona','labels','gui'], function(earth, stars, coro
 
         var time=performance.now()*0.001;
         var t=clock.getElapsedTime();
+
 
 
 

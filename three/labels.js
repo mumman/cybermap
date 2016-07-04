@@ -171,11 +171,12 @@ define(["shaders"], function(shaders){
            };
 
            //制作纹理
-           var tSize=2048;
            this.render_labels=function(){
+               var tSize=2048;
                var that=this;
                var r=document.createElement('canvas');
                r.width=r.height=tSize;//2048
+               r.height=256; //最终还是投影变换的问题
                var n=r.getContext('2d');
                n.fillStyle="#000";//n.fillStyle="rgba( 0, 0, 0, 0 )  #000"
                n.fillRect(0, 0, r.width, r.height);
@@ -205,7 +206,6 @@ define(["shaders"], function(shaders){
                 labels.texture.minFilter=THREE.LinearMipMapLinearFilter;
                 labels.texture.anisotropy=4;
                 labels.texture.format=THREE.LuminanceAlphaFormat;;*/
-
                that.texture.needsUpdate=true;
            };
            //创建labels网格
@@ -320,7 +320,8 @@ define(["shaders"], function(shaders){
 */
 
 
-              var t_blur=new THREE.TextureLoader().load('textures/123.jpg');
+               var t_blur=new THREE.TextureLoader().load('textures/123.jpg');
+
                that.customUniforms=shaders.shader['labels'].uniforms;
                that.customUniforms.t_color.value=that.texture; //that.texture
                that.customUniforms.inside.value=0;
@@ -333,7 +334,7 @@ define(["shaders"], function(shaders){
                    vertexShader: shaders.shader['labels'].vertexShader,
                    fragmentShader: shaders.shader['labels'].fragmentShader,
                    transparent: true,
-                   side:THREE.DoubleSide,
+                   side: THREE.DoubleSide,
                    blending: THREE.AdditiveBlending
                    //wireframe:true
                });
@@ -344,7 +345,7 @@ define(["shaders"], function(shaders){
 
             /*    var material_test=new THREE.MeshBasicMaterial({map: that.texture,transparent: true});
                 var labelPlane=new THREE.PlaneBufferGeometry(2048, 2048);
-                that.labelsMesh=new THREE.Mesh(labelPlane, material_test);
+                that.labelsMesh=new THREE.Mesh(that.geometry, material_test);
                 that.labelsMesh.position.set(0, 0, 0);
                 resolve(this);*/
            };
